@@ -109,3 +109,86 @@ processed %>%
   geom_point(size = 1, alpha = 0.4)+
   facet_wrap(~timepoint, scales = "free_x")+
   NULL  
+
+
+#### 
+#### feb 6 2025 -----
+
+
+import_licor_data = function(FILEPATH){
+  
+  filePaths <- list.files(path = FILEPATH, pattern = ".82z", full.names = TRUE, recursive = TRUE)
+  licor_dat <- do.call(bind_rows, lapply(filePaths, function(path) {
+    
+    data = read.csv(unzip(path, "data.csv"), skip = 1) %>% dplyr::select(DATE, TIME, CO2_DRY, CH4_DRY)
+    port1 = jsonlite::read_json(unzip(path, "metadata.json"))$`LI-8250`$PORT
+    port2 = jsonlite::read_json(unzip(path, "metadata.json"))$`8250-01`$PORT
+    
+    data %>% mutate(port = paste0(port1, "_", port2),
+                    source = basename(path))
+    
+  }))
+}
+
+
+file2 = import_licor_data(FILEPATH = "82m-0563-202502030000-202502061424")
+
+
+file2_processed = 
+  file2 %>% 
+  #mutate_all(as.numeric) %>% 
+  janitor::clean_names() %>% 
+  dplyr::select(date, time, port, co2_dry) %>% 
+  mutate(datetime = paste(date, time),
+         datetime = ymd_hms(datetime),
+         datetime2 = as.POSIXct(datetime, tz = "EST"),
+         co2_dry = as.numeric(co2_dry),
+         port = as.character(port)) %>% 
+  filter(!is.na(co2_dry))
+
+
+processed = 
+  file2_processed %>% 
+  janitor::clean_names() %>% 
+  dplyr::select(date, time, port, co2_dry) %>% 
+  mutate(datetime = paste(date, time),
+         datetime = ymd_hms(datetime),
+         datetime2 = as.POSIXct(datetime, tz = "EST"),
+         co2_dry = as.numeric(co2_dry),
+         port = as.character(port)) %>% 
+  filter(!is.na(co2_dry)) %>% 
+  filter(co2_dry >= 0)
+
+
+processed %>% 
+#  filter(datetime2 >= as.POSIXct("2025-02-04 11:00:00", tz = "EST")) %>% 
+#  filter(port %in% c(1, 4))%>% 
+  ggplot(
+    aes(x = datetime, y = co2_dry))+
+  # geom_path(data = file2_processed %>% filter(port == 4))+
+#  geom_point()+
+  geom_line()+
+  facet_wrap(~port)+
+  NULL  
+
+processed %>% 
+  filter(port %in% c(2, 4))%>% 
+  ggplot(
+    aes(x = datetime, y = co2_dry, color = soil))+
+  # geom_path(data = file2_processed %>% filter(port == 4))+
+  geom_point(size = 1, alpha = 0.4)+
+  facet_wrap(~timepoint, scales = "free_x")+
+  NULL  
+
+
+
+unzip("82m-0563-202502030000-202502061424/2025/02/03/82m-0563-20250203000058.82z") # port8
+unzip("82m-0563-202502030000-202502061424/2025/02/03/82m-0563-20250203000330.82z") # port7
+
+
+
+port1 = jsonlite::read_json(unzip("82m-0563-202502030000-202502061424/2025/02/03/82m-0563-20250203000058.82z", "metadata.json"))$`8250-01`
+port2 = jsonlite::read_json(unzip("82m-0563-202502030000-202502061424/2025/02/03/82m-0563-20250203000330.82z", "metadata.json"))$`LI-8250-01`$PORT
+
+
+port2 = jsonlite::read_json(unzip(path, "metadata.json"))$`LI-8250-01`$PORT
