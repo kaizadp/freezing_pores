@@ -1,0 +1,28 @@
+[Header]	
+System	TOC_TNb Standard	
+S/W Version	1.00	
+User	1322	
+Date/Time	2/10/2025 4:23:57 PM	
+
+[System]	
+Instrument Options	TOC/ASI/IC Unit/TN/	
+
+[Data]	
+Type	Anal.	Sample Name	Sample ID	Result(TOC)	Result(TC)	Result(IC)	Result(POC)	Result(NPOC)	Result(TN)	Unit	Vial	Date / Time	
+Unknown	NPOC	CondBlank1	Untitled					0.000		mg/L	1	2/10/2025 10:39:33 AM	
+Unknown	NPOC	CondBlank2	Untitled					0.000		mg/L	2	2/10/2025 10:55:22 AM	
+Unknown	NPOC	CondBlank3	Untitled					0.000		mg/L	3	2/10/2025 11:09:16 AM	
+Standard	NPOC	cal	Untitled					100.0		mg/L	4, 5, 6, 7, 8, 9	2/10/2025 12:39:04 PM	
+Unknown	NPOC	Blank1	Untitled					0.2471		mg/L	10	2/10/2025 12:54:56 PM	
+Unknown	NPOC	CKSTD1_10ppm	Untitled					9.537		mg/L	11	2/10/2025 1:11:07 PM	
+Unknown	NPOC	Blank2	Untitled					0.1140		mg/L	12	2/10/2025 1:24:49 PM	
+Unknown	NPOC	tube1	Untitled					0.9385		mg/L	13	2/10/2025 1:41:06 PM	
+Unknown	NPOC	tube2	Untitled					0.9540		mg/L	14	2/10/2025 1:53:06 PM	
+Unknown	NPOC	tube3	Untitled					1.105		mg/L	15	2/10/2025 2:07:22 PM	
+Unknown	NPOC	tube4	Untitled					1.310		mg/L	16	2/10/2025 2:23:42 PM	
+Unknown	NPOC	tube5	Untitled					1.265		mg/L	17	2/10/2025 2:40:17 PM	
+Unknown	NPOC	tube6	Untitled					1.165		mg/L	18	2/10/2025 2:52:20 PM	
+Unknown	NPOC	blank_filt	Untitled					0.9232		mg/L	19	2/10/2025 3:08:26 PM	
+Unknown	NPOC	blank_soln	Untitled					0.4262		mg/L	20	2/10/2025 3:22:18 PM	
+Unknown	NPOC	Blank3	Untitled					0.1103		mg/L	21	2/10/2025 3:33:51 PM	
+Unknown	NPOC	CKSTD2_10ppm	Untitled					9.546		mg/L	22	2/10/2025 3:47:19 PM	
