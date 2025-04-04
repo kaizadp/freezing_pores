@@ -52,3 +52,7 @@ rsconnect/
 
 1-data/x-old-data-respiration/
 1-data/respiration/
+
+data.csv
+metadata.json
+_targets/
