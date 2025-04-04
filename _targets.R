@@ -22,8 +22,10 @@ list(
   tar_target(corekey, read_sheet("https://docs.google.com/spreadsheets/d/1qpfho6Z7aHYg9zkT0dMtQy7Oth5MkVtFc7O7rB45_t4")),
   
   # respiration
-  tar_target(licor_map, read_sheet("https://docs.google.com/spreadsheets/d/1CkMjaIOUSHGJJloa4W4ILtFO3CVoeRCgK3Cf1GTom5o/", sheet = "simplified",
-             col_types = "c"))
-#  tar_target(licor_data, import_licor_data(FILEPATH = "1-data/respiration")),
-#  tar_target(licor_processed, process_licor_data(licor_data))
+  tar_target(licor_map, read_sheet("https://docs.google.com/spreadsheets/d/1CkMjaIOUSHGJJloa4W4ILtFO3CVoeRCgK3Cf1GTom5o/", 
+                                   sheet = "Sheet1", col_types = "c")),
+  tar_target(licor_data, import_licor_data(FILEPATH = "1-data/respiration_subset")),
+  tar_target(licor_processed_ppm, process_licor_data(licor_data, licor_map, corekey)),
+  tar_target(licor_processed_rates, fit_slope(licor_processed_ppm))
+  
 )
