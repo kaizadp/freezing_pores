@@ -1,7 +1,0 @@
-name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-corekey|stem|90a25510f388cc2f|dc9e3967a1cee576|b10e8b14727bd096|-1688814060||t20126.8117934953s|4234d4d3d176dfdc|445|rds|local|vector|||2.287||
-data|stem|2cb0d01e27f35045|43fae4011a0626f4|136bf5e07fbd9b1c|1588979285||t20126.7464129543s|d07e2e962de596ec|1750|rds|local|vector|||0.002||
-import_licor_data|function|c2b7db9f8c3485eb|||||||||||||||
-licor_map|stem|55f77c79614bb12e|3bd428799e239e82|b10e8b14727bd096|16055384||t20126.8118032294s|94e1d7418d47ed10|214|rds|local|vector|||0.806||
-process_licor_data|function|ec2fcc022963e78b|||||||||||||||
-random|function|9f18301ca921a572|||||||||||||||
