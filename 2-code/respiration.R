@@ -128,7 +128,7 @@ random = function(){
 
 
 x = function(){
-  
+# old graphs  
   gg1 = 
     processed %>% 
     filter(datetime >= ymd_hms("2025-01-22 13:00:00") &
@@ -165,100 +165,8 @@ x = function(){
     NULL  
   
   ggpubr::ggarrange(gg2, gg3, common.legend = TRUE, legend = "top")
-  
-}
 
 
-x = function(){
-  
-  gg1 = 
-    processed %>% 
-    filter(datetime >= ymd_hms("2025-01-22 13:00:00") &
-             datetime <= ymd_hms("2025-01-22 15:05:00")) %>% 
-    filter(!core_name %in% c("FOR_20", "FOR_21")) %>% 
-    filter(!core_name %in% "ambient") %>% 
-    ggplot(aes(x = datetime, y = co2_dry, color = core_name))+
-    geom_point(size = 0.5)+
-    #facet_wrap(~water_treatment, ncol = 1)+
-    ylim(440, 600)+
-    NULL 
-  
-  
-  gg2 = 
-    processed %>% 
-    filter(datetime >= ymd_hms("2025-01-28 13:00:00") &
-             datetime <= ymd_hms("2025-01-28 15:05:00")) %>% 
-    filter(!core_name %in% c("FOR_20", "FOR_21")) %>% 
-    filter(!core_name %in% "ambient") %>% 
-    ggplot(aes(x = datetime, y = co2_dry, color = core_name))+
-    geom_point(size = 0.5)+
-  #  facet_wrap(~water_treatment, ncol = 1)+
-    ylim(440, 600)+
-    NULL 
-  
-  
-  gg3 = 
-    processed %>% 
-    filter(datetime >= ymd_hms("2025-02-04 13:00:00") &
-             datetime <= ymd_hms("2025-02-05 07:05:00")) %>% 
-    filter(!core_name %in% c("FOR_20", "FOR_21")) %>% 
-    filter(!core_name %in% "ambient") %>% 
-    ggplot(aes(x = datetime, y = co2_dry, color = core_name))+
-    geom_point(size = 0.5)+
-  #  facet_wrap(~water_treatment, ncol = 1)+
-    ylim(440, 600)+
-    NULL  
-  
-  
-}
-
-
-
-x = function(){
-  
-  gg1 = 
-    processed %>% 
-    filter(datetime >= ymd_hms("2025-01-22 13:05:00") & datetime <= ymd_hms("2025-01-24 00:05:00") 
-    ) %>% 
-    filter(!core_name %in% c("FOR_20", "FOR_21")) %>% 
-    filter(!core_name %in% "ambient") %>% 
-    ggplot(aes(x = datetime, y = co2_dry, color = core_name))+
-    geom_point(size = 0.5)+
-    facet_wrap(~water_treatment)+
-    ylim(440, 600)+
-    NULL 
-  
-  
-  gg2 = 
-    processed %>% 
-    filter(
-             (datetime >= ymd_hms("2025-01-28 13:05:00") & datetime <= ymd_hms("2025-01-30 00:05:00")) 
-    ) %>% 
-    filter(!core_name %in% c("FOR_20", "FOR_21")) %>% 
-    filter(!core_name %in% "ambient") %>% 
-    ggplot(aes(x = datetime, y = co2_dry, color = core_name))+
-    geom_point(size = 0.5)+
-    facet_wrap(~water_treatment, nrow = 1)+
-    ylim(440, 600)+
-    NULL 
-  
-  gg3 = 
-    processed %>% 
-    filter((datetime >= ymd_hms("2025-02-04 13:05:00") & datetime <= ymd_hms("2025-02-07 00:05:00"))
-    ) %>% 
-    filter(!core_name %in% c("FOR_20", "FOR_21")) %>% 
-    filter(!core_name %in% "ambient") %>% 
-    ggplot(aes(x = datetime, y = co2_dry, color = core_name))+
-    geom_point(size = 0.5)+
-    facet_wrap(~water_treatment, nrow = 1)+
-    ylim(440, 600)+
-    NULL 
-  
-  
-  ggpubr::ggarrange(gg2, gg3, ncol = 1, common.legend = TRUE, legend = "top")
-  
-  
-  
   
   processed %>% 
     filter(datetime >= ymd_hms("2025-02-04 12:05:00")
@@ -267,16 +175,16 @@ x = function(){
     filter(!core_name %in% "ambient") %>% 
     ggplot(aes(x = datetime, y = co2_dry))+
     geom_point(size = 0.5)+
-#    geom_path()+
+    #    geom_path()+
     facet_wrap(~core_name)+
- #   ylim(440, 600)+
+    #   ylim(440, 600)+
     NULL 
- 
+  
   
   processed %>% 
-#    filter(datetime >= ymd_hms("2025-02-04 12:05:00")) %>% 
+    #    filter(datetime >= ymd_hms("2025-02-04 12:05:00")) %>% 
     filter(core_name %in% c("FOR_20", "FOR_21")) %>% 
-#    filter(!core_name %in% "ambient") %>% 
+    #    filter(!core_name %in% "ambient") %>% 
     ggplot(aes(x = datetime, y = co2_dry))+
     geom_point(size = 0.5)+
     #    geom_path()+
@@ -284,7 +192,18 @@ x = function(){
     ylim(440, 600)+
     NULL 
   
-   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
 }
 
 
@@ -390,3 +309,17 @@ more = function(){
 
   
 }
+
+licor_processed_ppm %>% 
+  filter(datetime >= ymd_hms("2025-01-27 13:00:00")) %>% 
+  filter(!core_name %in% c("FOR_20", "FOR_21")) %>% 
+  ggplot(aes(x = datetime, y = co2_ppm, color = core_name))+
+  geom_line()+
+  facet_wrap(~water_treatment, ncol = 1)
+
+licor_processed_ppm %>% 
+  filter(datetime >= ymd_hms("2025-01-27 13:00:00")) %>% 
+  filter(!core_name %in% c("FOR_20", "FOR_21")) %>% 
+  ggplot(aes(x = datetime, y = ch4_ppb, color = core_name))+
+  geom_line()+
+  facet_wrap(~water_treatment, ncol = 1)
