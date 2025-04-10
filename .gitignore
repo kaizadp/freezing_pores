@@ -56,3 +56,7 @@ rsconnect/
 data.csv
 metadata.json
 _targets/
+
+1-data/xct/xlsx-full
+1-data/xct/csv-pores
+1-data/xct/csv-full
