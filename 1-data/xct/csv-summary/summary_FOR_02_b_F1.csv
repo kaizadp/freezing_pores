@@ -1,0 +1,30 @@
+﻿Voxel,0.0381,,,,Pores ,,,,,,,Volume (mm3),Area (mm2),Diameter(mm),Area Fraction
+Sizes X Y Z ,820,813,1553,,Fraction     Total Vol (mm3) Label vox cnt,Label vol (mm3),Total Vol (mm3),Label vox cnt,total vox cnt,,Label analysis,,,,
+Actual Size ,31.242,30.9753,59.1693,,0.0860447,4944.67,57466.3,89084047,1035322980,,Mean,0.046423867,0.046423867,9.62E-02,8.08E-07
+,,,,,,,,,,,Min,5.55E-05,5.55E-05,4.73E-02,9.66E-10
+Pores,0.0860447,,,,Pores (connected),,,,,,Max,4034.918457,4034.918457,19.75204659,7.02E-02
+,,,,,Fraction    ,Label vol (mm3),Total Vol (mm3),Label vox cnt,total vox cnt,,Median,1.11E-04,1.11E-04,5.96E-02,1.93E-09
+Pores.Axis.Connectivity,0.0702136,,,,0.0702136,4034.92,57466.3,72693765,1035322980,,Variance,153.1275177,153.1275177,1.51E-02,4.64E-08
+,,,,,,,,,,,Kurtosis,106198.7813,106198.7813,6312.503418,106199
+Connected Pores (%),81.60%,,,,Pores (unconnected),,,,,,Skewness,325.736084,325.736084,45.11467361,325.7366638
+,,,,,Fraction    ,Label vol (mm3),Total Vol (mm3),Label vox cnt,total vox cnt,,,,,,
+Bulk Density,1.23504,,,,0.0158311,909.754,57466.3,16390282,1035322980,,,,,,
+,,,,,,,,,,,,,,,
+PNM in Z,,,,,,,,,,,,,,,
+k [µm^2],k [d],TotalFlowRatePerSec,Tortuosity,,,,,,,,,,,,
+1.46E-05,1.48E-05,6.28E+01,1.858174535,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+PNM in Y,,,,,,,,,,,,,,,
+k [µm^2],k [d],TotalFlowRatePerSec,Tortuosity,,,,,,,,,,,,
+2.33E-05,2.36E-05,3.70E+02,1.768601273,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+PNM in X,,,,,,,,,,,,,,,
+k [µm^2],k [d],TotalFlowRatePerSec,Tortuosity,,,,,,,,,,,,
+2.90E-06,2.94E-06,4.48E+01,1.801942269,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+Image cropping,,,,,,,,,,,,,,,
+Min index,384,344,226,,,,,,,,,,,,
+max index,1203,1156,1778,,,,,,,,,,,,
+,min,max,,,,,,,,,,,,,
+Scan intensity:,-26.96,677.8,,,,,,,,,,,,,
+Thresholding intensity (Otsu),-26.96,20.55,,,,,,,,,,,,,
