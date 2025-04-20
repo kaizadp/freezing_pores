@@ -1,0 +1,167 @@
+---
+title: "Untitled"
+output: html_document
+date: "2025-04-20"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+theme_kp <- function() {  # this for all the elements common across plots
+  theme_bw() %+replace%
+    theme(legend.position = "top",
+          legend.key=element_blank(),
+          legend.title = element_text(size = 14, hjust = 0),
+          legend.text = element_text(size = 12),
+          legend.key.size = unit(1.5, 'lines'),
+          legend.background = element_rect(colour = NA),
+          panel.border = element_rect(color="black",linewidth=1, fill = NA),
+          
+          plot.title = element_text(hjust = 0, size = 14),
+          axis.text = element_text(size = 14, color = "black"),
+          axis.title = element_text(size = 14, face = "bold", color = "black"),
+          
+          # formatting for facets
+          panel.background = element_blank(),
+          strip.background = element_rect(colour="white", fill="white"), #facet formatting
+          panel.grid = element_blank(),
+          panel.spacing.x = unit(1, "lines"), #facet spacing for x axis
+          panel.spacing.y = unit(1.5, "lines"), #facet spacing for x axis
+          strip.text.x = element_text(size=14, face="bold"), #facet labels
+          strip.text.y = element_text(size=14, face="bold", angle = 270) #facet labels
+    )
+}
+theme_set(theme_kp())
+
+```
+
+
+# XCT
+
+## PNM
+
+```{r pnm_radius}
+  
+pnm_clean2 = 
+  pnm_clean %>% 
+  mutate(water_treatment = paste(water_treatment, "water"),
+         water_treatment = factor(water_treatment, levels = c("low water", "high water")))
+
+
+
+pnm_clean2 %>% 
+    filter(core_name %in% c("FOR_01", "FOR_05")) %>% 
+    filter(grepl("T", timepoint)) %>% 
+    ggplot(aes(x = EqRadius, color = timepoint, group = timepoint)) +
+    geom_density(linewidth = 1, show.legend = F)+
+    facet_wrap(~water_treatment)+
+    xlim(0, 2.5)+
+    scale_color_manual(values = c("black", "lightblue", "#dd4124", "blue", "darkred", "darkblue", "orange"),
+                       breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
+  labs(x = "radius (mm)")+
+  theme(panel.grid = element_blank())
+
+
+pnm_clean2 %>% 
+  filter(core_name %in% c("FOR_01", "FOR_05")) %>% 
+  #   filter(grepl("T", timepoint)) %>% 
+  ggplot(aes(x = EqRadius, color = timepoint, group = timepoint)) +
+  geom_density(linewidth = 1, show.legend = F)+
+  facet_wrap(~water_treatment)+
+  xlim(0, 2.5)+
+  scale_color_manual(values = c("black", "lightblue", "#dd4124", "blue", "darkred", "darkblue", "orange"),
+                     breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
+  labs(x = "radius (mm)")+
+  theme(panel.grid = element_blank())
+```
+
+```{r pnm_coordination}
+
+pnm_clean2 %>% 
+  filter(core_name %in% c("FOR_01", "FOR_04")) %>% 
+  filter(grepl("T", timepoint)) %>% 
+  ggplot(aes(x = timepoint, y = Coordination.Number, color = timepoint, group = timepoint, fill = timepoint)) +
+  ggdist::stat_halfeye(#aes(fill = Incubation), 
+    size = 1, alpha = 0.5,
+    position = position_nudge(x = 0.2), width = 0.5)+
+  geom_jitter(width = 0.15, size = 0.8)+
+  scale_color_manual(values = c("black", "lightblue", "#dd4124", "blue", "darkred", "darkblue", "orange"),
+                     breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
+  scale_fill_manual(values = c("black", "lightblue", "#dd4124", "blue", "darkred", "darkblue", "orange"),
+                    breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
+  labs(x = "", 
+       y = "Pore Coordination Number")+
+  facet_wrap(~water_treatment, nrow = 2)+
+  theme(panel.grid = element_blank(),
+        legend.position = "none")
+
+
+
+
+
+
+
+
+#  '#00496f', '#0f85a0', '#edd746', '#ed8b00', '#dd4124'
+
+```
+
+## Summaries
+
+```{r summary_volume}
+
+xct_summary_long2 = 
+  xct_summary_long %>% 
+  mutate(water_treatment = paste(water_treatment, "water"),
+         water_treatment = factor(water_treatment, levels = c("low water", "high water")))
+
+
+  xct_summary_long2 %>% 
+    filter(!is.na(timepoint)) %>% 
+    ggplot(aes(x = timepoint, y = total_volume_pores_mm3, color = water_treatment, group = core_name))+
+    geom_point(size = 3)+
+    geom_line()+
+    scale_color_manual(values = (PNWColors::pnw_palette("Bay", 5)))+
+      labs(x = "", 
+       y = "Pore Volume (mm3)")+
+    facet_wrap(~water_treatment)+
+      theme(panel.grid = element_blank(),
+        legend.position = "none")
+
+  
+```
+
+```{r summary_connected}
+
+xct_summary_long2 %>% 
+  filter(!is.na(timepoint)) %>% 
+  filter(core_name == "FOR_01") %>% 
+  ggplot(aes(x = timepoint, y = connected_pores_percent, color = water_treatment, group = core_name))+
+  geom_line(color = "black", linewidth = 1)+
+  geom_point(size = 5, color = "white", fill = "black", shape = 21, stroke = 2)+
+  ylim(75, 100)+
+  facet_wrap(~water_treatment)+
+  labs(y = "Connected Pores (%)",
+       x = "")+
+  theme(legend.position = "none")
+
+
+xct_summary_long2 %>% 
+  filter(!is.na(timepoint)) %>% 
+  filter(core_name == "FOR_04") %>% 
+  ggplot(aes(x = timepoint, y = connected_pores_percent, color = water_treatment, group = core_name))+
+  geom_line(color = "black", linewidth = 1)+
+  geom_point(size = 5, color = "white", fill = "black", shape = 21, stroke = 2)+
+  ylim(75, 100)+
+  facet_wrap(~water_treatment)+
+  labs(y = "Connected Pores (%)",
+       x = "")+
+  theme(legend.position = "none")
+
+
+
+```
+
