@@ -77,7 +77,16 @@ fit_slope = function(licor_processed_ppm){
     group_by(core_name, water_treatment, sample_number) %>% 
     dplyr::summarize(datetime = min(datetime),
                      co2_ppm_s = lm(co2_ppm ~ elapsed_sec)$coefficients["elapsed_sec"],
-                     ch4_ppb_s = lm(ch4_ppb ~ elapsed_sec)$coefficients["elapsed_sec"])  
+                     ch4_ppb_s = lm(ch4_ppb ~ elapsed_sec)$coefficients["elapsed_sec"],
+                     co2_max_ppm = max(co2_ppm),
+                     sample_elapsed = max(elapsed_sec))  %>% 
+    filter(sample_elapsed < 200) %>% 
+    mutate(timepoint = case_when(datetime >= ymd_hms("2025-02-18 12:30:00") ~ "ftc3",
+                                 datetime >= ymd_hms("2025-02-11 12:30:00") ~ "ftc2",
+                                 datetime >= ymd_hms("2025-02-04 12:30:00") ~ "ftc1",
+                                 datetime >= ymd_hms("2025-01-28 12:30:00") ~ "t0")) %>% 
+    group_by(core_name, timepoint) %>% 
+    dplyr::mutate(elapsed_minutes = as.double(difftime(datetime, min(datetime), units = "mins")))
   
   
       ##  rate %>% 
@@ -310,12 +319,25 @@ more = function(){
   
 }
 
+
+
+more = function(){
 licor_processed_ppm %>% 
-  filter(datetime >= ymd_hms("2025-01-27 13:00:00")) %>% 
+  filter(datetime >= ymd_hms("2025-02-18 13:00:00") & datetime <= ymd_hms("2025-02-18 19:00:00")) %>% 
   filter(!core_name %in% c("FOR_20", "FOR_21")) %>% 
   ggplot(aes(x = datetime, y = co2_ppm, color = core_name))+
   geom_line()+
   facet_wrap(~water_treatment, ncol = 1)
+  
+  
+  
+  
+  licor_processed_rates %>% 
+   # filter(datetime >= ymd_hms("2025-02-18 13:00:00") & datetime <= ymd_hms("2025-02-18 19:00:00")) %>% 
+    filter(!core_name %in% c("FOR_20", "FOR_21")) %>% 
+    ggplot(aes(x = datetime, y = co2_max_ppm, color = core_name))+
+    geom_line()+
+    facet_wrap(~water_treatment, ncol = 1)
 
 licor_processed_ppm %>% 
   filter(datetime >= ymd_hms("2025-01-27 13:00:00")) %>% 
@@ -323,3 +345,44 @@ licor_processed_ppm %>%
   ggplot(aes(x = datetime, y = ch4_ppb, color = core_name))+
   geom_line()+
   facet_wrap(~water_treatment, ncol = 1)
+
+
+
+test = 
+  licor_processed_rates %>% 
+  mutate(timepoint = case_when(datetime >= ymd_hms("2025-02-18 12:30:00") ~ "ftc3",
+                               datetime >= ymd_hms("2025-02-11 12:30:00") ~ "ftc2",
+                               datetime >= ymd_hms("2025-02-04 12:30:00") ~ "ftc1",
+                               datetime >= ymd_hms("2025-01-28 12:30:00") ~ "t0"))
+
+
+licor_processed_rates %>% 
+  mutate(timepoint = factor(timepoint, levels = c("t0", "ftc1", "ftc2", "ftc3"))) %>% 
+  filter(water_treatment != "ambient") %>% 
+  filter(!is.na(timepoint)) %>% 
+  filter(elapsed_minutes < 1200) %>% 
+  # filter(datetime >= ymd_hms("2025-02-18 13:00:00") & datetime <= ymd_hms("2025-02-18 19:00:00")) %>% 
+  filter(!core_name %in% c("FOR_20", "FOR_21")) %>% 
+  ggplot(aes(x = elapsed_minutes/60, y = co2_max_ppm, group = core_name, color = water_treatment))+
+  geom_line(alpha = 0.4)+
+  geom_smooth(se = F, aes(group = water_treatment))+
+  facet_grid(. ~ timepoint, scales = "free_x")
+
+
+licor_processed_rates %>% 
+  mutate(timepoint = factor(timepoint, levels = c("t0", "ftc1", "ftc2", "ftc3"))) %>% 
+  filter(water_treatment != "ambient") %>% 
+  filter(!is.na(timepoint)) %>% 
+  filter(elapsed_minutes < 1200) %>% 
+  # filter(datetime >= ymd_hms("2025-02-18 13:00:00") & datetime <= ymd_hms("2025-02-18 19:00:00")) %>% 
+  filter(!core_name %in% c("FOR_20", "FOR_21")) %>% 
+  ggplot(aes(x = elapsed_minutes/60, y = co2_max_ppm, group = core_name, color = water_treatment))+
+  geom_line()+
+#  geom_smooth(se = F, aes(group = water_treatment))+
+  geom_hline(yintercept = 450)+
+  facet_grid(water_treatment+core_name ~ timepoint, scales = "free_x")
+
+
+
+
+}
