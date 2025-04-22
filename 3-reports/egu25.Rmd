@@ -5,10 +5,17 @@ date: "2025-04-20"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE)
 ```
 
 ```{r}
+library(tidyverse)
+targets::tar_load_everything()
+
+
+
 
 theme_kp <- function() {  # this for all the elements common across plots
   theme_bw() %+replace%
@@ -46,7 +53,7 @@ theme_set(theme_kp())
 ```{r pnm_radius}
   
 pnm_clean2 = 
-  pnm_clean %>% 
+  xct_pnm_processed %>% 
   mutate(water_treatment = paste(water_treatment, "water"),
          water_treatment = factor(water_treatment, levels = c("low water", "high water")))
 
@@ -105,7 +112,7 @@ pnm_clean2 %>%
 
 
 
-#  '#00496f', '#0f85a0', '#edd746', '#ed8b00', '#dd4124'
+  # '#00496f', '#0f85a0', '#edd746', '#ed8b00', '#dd4124'
 
 ```
 
@@ -113,13 +120,13 @@ pnm_clean2 %>%
 
 ```{r summary_volume}
 
-xct_summary_long2 = 
-  xct_summary_long %>% 
+xct_summary2 = 
+  xct_summary_processed %>% 
   mutate(water_treatment = paste(water_treatment, "water"),
          water_treatment = factor(water_treatment, levels = c("low water", "high water")))
 
 
-  xct_summary_long2 %>% 
+  xct_summary2 %>% 
     filter(!is.na(timepoint)) %>% 
     ggplot(aes(x = timepoint, y = total_volume_pores_mm3, color = water_treatment, group = core_name))+
     geom_point(size = 3)+
@@ -136,7 +143,7 @@ xct_summary_long2 =
 
 ```{r summary_connected}
 
-xct_summary_long2 %>% 
+xct_summary2 %>% 
   filter(!is.na(timepoint)) %>% 
   filter(core_name == "FOR_01") %>% 
   ggplot(aes(x = timepoint, y = connected_pores_percent, color = water_treatment, group = core_name))+
@@ -149,7 +156,7 @@ xct_summary_long2 %>%
   theme(legend.position = "none")
 
 
-xct_summary_long2 %>% 
+xct_summary2 %>% 
   filter(!is.na(timepoint)) %>% 
   filter(core_name == "FOR_04") %>% 
   ggplot(aes(x = timepoint, y = connected_pores_percent, color = water_treatment, group = core_name))+
@@ -164,4 +171,53 @@ xct_summary_long2 %>%
 
 
 ```
+
+```{r}
+# coordinations
+
+xct_pnm_processed %>% filter(core_name == "FOR_01" & 
+                               Coordination.Number == 0  & 
+                               grepl("T", timepoint) &
+                               timepoint %in% c("T0", "T3")
+                             ) %>% 
+  ggplot(aes(x = X.Coord, y = Z.Coord, size = EqRadius))+
+  geom_point(color = "black")+
+  geom_point(data = pnm_clean2 %>% filter(core_name == "FOR_01" & 
+                               Coordination.Number > 20  & 
+                               grepl("T", timepoint) &
+                               timepoint %in% c("T0", "T3")
+                             ),
+             color = '#ed8b00')+
+  facet_wrap(~timepoint, nrow = 1)+
+  scale_size(range = c(2, 6))+
+  theme(legend.position = "none",
+        axis.text = element_blank(),
+        axis.title = element_blank())
+
+
+
+xct_pnm_processed %>% filter(core_name == "FOR_04" & 
+                               Coordination.Number == 0  & 
+                               grepl("T", timepoint) &
+                               timepoint %in% c("T0", "T3")
+                             ) %>% 
+  ggplot(aes(x = X.Coord, y = Z.Coord, size = EqRadius))+
+  geom_point(color = "black")+
+  geom_point(data = pnm_clean2 %>% filter(core_name == "FOR_04" & 
+                               Coordination.Number > 20  & 
+                               grepl("T", timepoint) &
+                               timepoint %in% c("T0", "T3")
+                             ),
+             color = '#ed8b00')+
+  facet_wrap(~timepoint, nrow = 1)+
+  scale_size(range = c(2, 6))+
+  theme(legend.position = "none",
+        axis.text = element_blank(),
+        axis.title = element_blank())
+
+  
+
+
+```
+
 
