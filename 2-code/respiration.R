@@ -57,7 +57,12 @@ process_licor_data = function(licor_data, licor_map, corekey){
     rename(co2_ppm = co2_dry,
            ch4_ppb = ch4_dry) %>% 
     filter(co2_ppm <= 700) %>% 
-    arrange(date, time)
+    arrange(date, time) %>% 
+    mutate(timepoint = case_when(datetime >= ymd_hms("2025-02-18 12:30:00") ~ "ftc3",
+                                 datetime >= ymd_hms("2025-02-11 12:30:00") ~ "ftc2",
+                                 datetime >= ymd_hms("2025-02-04 12:30:00") ~ "ftc1",
+                                 datetime >= ymd_hms("2025-01-28 12:30:00") ~ "t0")) %>% 
+    filter(!is.na(timepoint))
   
   licor_processed_ppm
 }
@@ -80,11 +85,7 @@ fit_slope = function(licor_processed_ppm){
                      ch4_ppb_s = lm(ch4_ppb ~ elapsed_sec)$coefficients["elapsed_sec"],
                      co2_max_ppm = max(co2_ppm),
                      sample_elapsed = max(elapsed_sec))  %>% 
-    filter(sample_elapsed < 200) %>% 
-    mutate(timepoint = case_when(datetime >= ymd_hms("2025-02-18 12:30:00") ~ "ftc3",
-                                 datetime >= ymd_hms("2025-02-11 12:30:00") ~ "ftc2",
-                                 datetime >= ymd_hms("2025-02-04 12:30:00") ~ "ftc1",
-                                 datetime >= ymd_hms("2025-01-28 12:30:00") ~ "t0")) %>% 
+    filter(sample_elapsed < 200)  %>% 
     group_by(core_name, timepoint) %>% 
     dplyr::mutate(elapsed_minutes = as.double(difftime(datetime, min(datetime), units = "mins")))
   
@@ -109,6 +110,73 @@ fit_slope = function(licor_processed_ppm){
       ##  ## 8 hours of GHG
   
   rate
+  
+}
+
+
+compute_rates <- function(licor_processed_ppm, volume_cm3 = 81.07, tair_C = 21, pressure_kPa = 101.325) {
+  
+    ## We want to compute rate of change (CO2 ppm/s and CH4 ppb/s),
+    ## and then convert this to µmol/s using the ideal gas law:
+    ## A = dC/dt * V * Pa/RT (cf. Steduto et al. 2002), where
+    ## 	A is the flux (µmol/g/s)
+    ##	  dC/dt is raw respiration as above (mole fraction/s)
+    ## 	V is total chamber volume (cm3)
+    ##	  Pa is atmospheric pressure (kPa)
+    ##	  R is universal gas constant (8.3 x 10^3 cm3 kPa mol-1 K-1)
+    ##	  T is air temperature (K)
+  
+  R <- 8.3145e+3			# cm3 kPa K−1 mol−1
+
+  # Whenever the valve position changes, that's a new sample starting
+  newsample <- licor_processed_ppm$port != c(NA, head(licor_processed_ppm$port, -1))
+  newsample[is.na(newsample)] <- FALSE
+  licor_processed_ppm$sample_number = cumsum(newsample)
+  
+  rate = 
+    licor_processed_ppm %>% 
+    mutate(datetime = as_datetime(paste(date, time))) %>% 
+    group_by(sample_number) %>% 
+    dplyr::mutate(elapsed_sec = as.double(difftime(datetime, min(datetime), units = "secs"))) %>% 
+    group_by(core_name, water_treatment, sample_number, timepoint) %>% 
+    dplyr::summarize(datetime = min(datetime),
+                     co2_ppm_s = lm(co2_ppm ~ elapsed_sec)$coefficients["elapsed_sec"],
+                     ch4_ppb_s = lm(ch4_ppb ~ elapsed_sec)$coefficients["elapsed_sec"],
+                     co2_max_ppm = max(co2_ppm),
+                     sample_elapsed = max(elapsed_sec))  %>% 
+    filter(sample_elapsed < 200)  %>% 
+    group_by(core_name, timepoint) %>% 
+    dplyr::mutate(elapsed_hr = as.double(difftime(datetime, min(datetime), units = "hours")),
+                  # Respiration, µmol/time unit via ideal gas law
+                  co2_umol_s = co2_ppm_s * volume_cm3 * pressure_kPa / (R * (tair_C + 273.15)),
+                  co2_umol_hr = co2_umol_s * 3600
+                  )
+
+              # Compute ppm/time unit change in gas concentration
+              #m <- lm(gas_ppm ~ time)
+              #gas_ppm_time <- unname(coefficients(m)["time"])
+}
+cumulative_evolution = function(licor_processed_rates){
+  
+  fn = function(licor_processed_rates){
+    co2_interp = 
+      approx(licor_processed_rates$elapsed_hr, 
+             licor_processed_rates$co2_umol_hr, 
+             ties = mean, rule = 2) %>% 
+      as.tibble() %>% 
+      mutate(delta_hr = x - lag(x),
+             co2_umol = y * delta_hr) %>% 
+      summarize(co2_umol_cum = sum(co2_umol, na.rm = T)) %>% 
+      force()
+  }
+  
+  
+  cumulative = 
+    licor_processed_rates %>% 
+    filter(elapsed_hr < 25) %>% 
+    filter(elapsed_hr > 0) %>% 
+    group_by(water_treatment, core_name, timepoint) %>% 
+    do(fn(.))
   
 }
 
