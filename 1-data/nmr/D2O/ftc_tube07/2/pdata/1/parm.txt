@@ -1,0 +1,47 @@
+
+Current Data Parameters
+NAME         ftc_tube07              
+EXPNO                 2              
+PROCNO                1              
+
+F2 - Acquisition Parameters
+Date_          20250419              
+Time              22.24 h            
+INSTRUM           spect              
+PROBHD   Z116098_0806 (              
+PULPROG      zggpw5_rpy              
+TD                32768              
+SOLVENT             D2O              
+NS                 1600              
+DS                    4              
+SWH            6393.862 Hz           
+FIDRES         0.390250 Hz           
+AQ            2.5624576 sec          
+RG               196.66              
+DW               78.200 usec         
+DE                 6.50 usec         
+TE                298.0 K            
+D1           2.00000000 sec          
+D16          0.00020000 sec          
+D19      0 sec          
+TD0                 200              
+SFO1        400.1318806 MHz          
+NUC1                 1H              
+P1                10.00 usec         
+P27               10.00 usec         
+PLW1        14.57900047 W            
+PLW18       14.57900047 W            
+GPNAM[1]     SMSQ10.100              
+GPZ1              34.00 %            
+GPNAM[2]     SMSQ10.100              
+GPZ2              22.00 %            
+P16             1000.00 usec         
+
+F2 - Processing parameters
+SI                32768              
+SF          400.1300000 MHz          
+WDW                  EM              
+SSB      0              
+LB                 0.30 Hz           
+GB       0              
+PC                 1.00              

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PeakList>
+  <PeakList1D>
+    <PeakList1DHeader creator="nmr" date="2025-04-19T22:24:06.718-07:00" expNo="2" name="ftc_tube07" owner="" procNo="1" source="C:/Bruker/TopSpin3.6.0/data/kpatel/nmr">
+      <PeakPickDetails>F1=12.689730ppm, F2=-3.289732ppm, MI=0.00cm, MAXI=10000.00cm, PC=1.000
+      </PeakPickDetails>
+    </PeakList1DHeader>
+    <Peak1D F1="11.439605" intensity="1.493370e+001" type="0"/>
+    <Peak1D F1="2.543829" intensity="1.454557e+001" type="0"/>
+    <Peak1D F1="0.416320" intensity="1.482250e+001" type="0"/>
+  </PeakList1D>
+</PeakList>

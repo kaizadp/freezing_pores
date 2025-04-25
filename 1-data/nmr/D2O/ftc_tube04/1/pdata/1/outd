@@ -1,0 +1,16 @@
+##TITLE= Parameter file, TopSpin 3.6.0
+##JCAMPDX= 5.0
+##DATATYPE= Parameter Values
+##NPOINTS= 1	$$ modification sequence number
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= nmr
+$$ 2025-04-18 17:44:12.625 -0700  nmr@bsf2231
+$$ C:/Bruker/TopSpin3.6.0/prog/curdir/changer/inmrchanger/Apr11-2025-1556-wjoo/1/1.100/data/nmr/ftc_tube01/2/pdata/1/outd
+$$ process C:\Bruker\TopSpin3.6.0\prog\mod\xwish3.exe
+##$CURPLOT= <>
+##$CURPRIN= <$>
+##$DFORMAT= <normdp>
+##$LAYOUT= <+/1D_H.xwp>
+##$LFORMAT= <normlp>
+##$PFORMAT= <normpl>
+##END=
