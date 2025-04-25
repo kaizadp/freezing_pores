@@ -145,3 +145,31 @@ plot_mbc = function(mbc_processed){
 
 
 # -------------------------------------------------------------------------
+
+suva_fn = function(){
+  ## suva
+  suva = googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1Zab9xJK-ACkxCwRfqAXps8NCVfx0ZkX2RyhmJ_92sWc/",
+                                   sheet = "SUVA")
+  
+  dilution = googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1Zab9xJK-ACkxCwRfqAXps8NCVfx0ZkX2RyhmJ_92sWc/",
+                                       sheet = "subsampling-USE THIS") %>% dplyr::select(tube_name, WEOM_dilution, ftc, water_treatment)
+  
+  
+  
+  suva_processed = 
+    weoc_data %>% 
+    janitor::clean_names() %>% 
+    dplyr::select(sample_name, result_npoc) %>% 
+    rename(tube_name = sample_name) %>% 
+    left_join(dilution) %>% 
+    left_join(suva) %>% 
+    filter(!is.na(abs_254nm)) %>% 
+    mutate(npoc_dil_correction = result_npoc * WEOM_dilution,
+           suva = abs_254nm / npoc_dil_correction)
+  
+  
+  suva_processed %>% 
+    ggplot(aes(x = ftc, y = suva, color = water_treatment, group = tube_name))+
+    geom_point(size = 4)+
+    facet_wrap(~water_treatment)
+}
