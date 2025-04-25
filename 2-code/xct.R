@@ -64,7 +64,7 @@ import_xct_summaries = function(FILEPATH, PATTERN){
   
   
 }
-process_xct_summaries = function(xct_summary){
+process_xct_summaries = function(xct_summary, corekey){
   
   xct_summary_long =
     xct_summary %>% 
@@ -214,9 +214,9 @@ import_xct_pnm = function(FILEPATH, PATTERN){
   
   
 }
-process_xct_pnm = function(xct_pnm){
+process_xct_pnm = function(xct_pnm, corekey){
   
-  pnm_clean = 
+ # pnm_clean = 
     xct_pnm %>% 
     mutate(core_name = str_extract(source, "FOR_[0-9]{2}"),
            timepoint = str_extract(source, "F[0-9]|T[0-9]"),
