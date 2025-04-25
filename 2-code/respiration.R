@@ -173,7 +173,7 @@ cumulative_evolution = function(licor_processed_rates){
   
   cumulative = 
     licor_processed_rates %>% 
-    filter(elapsed_hr < 25) %>% 
+    filter(elapsed_hr < 20) %>% 
     filter(elapsed_hr > 0) %>% 
     group_by(water_treatment, core_name, timepoint) %>% 
     do(fn(.))
