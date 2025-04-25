@@ -22,7 +22,7 @@ theme_kp <- function() {  # this for all the elements common across plots
     theme(legend.position = "top",
           legend.key=element_blank(),
           legend.title = element_text(size = 14, hjust = 0),
-          legend.text = element_text(size = 12),
+          legend.text = element_text(size = 14),
           legend.key.size = unit(1.5, 'lines'),
           legend.background = element_rect(colour = NA),
           panel.border = element_rect(color="black",linewidth=1, fill = NA),
@@ -85,7 +85,7 @@ pnm_clean2 %>%
   theme(panel.grid = element_blank())
 ```
 
-```{r pnm_coordination}
+```{r pnm_coordination_raincloud}
 
 pnm_clean2 %>% 
   filter(core_name %in% c("FOR_01", "FOR_04")) %>% 
@@ -115,6 +115,168 @@ pnm_clean2 %>%
   # '#00496f', '#0f85a0', '#edd746', '#ed8b00', '#dd4124'
 
 ```
+
+
+```{r pnm_coordination_map}
+# coordinations
+
+xct_pnm_processed %>% filter(core_name == "FOR_01" & 
+                               Coordination.Number == 0  & 
+                               grepl("T", timepoint) &
+                               timepoint %in% c("T0", "T3")
+                             ) %>% 
+  ggplot(aes(x = X.Coord, y = Z.Coord, size = EqRadius))+
+  geom_point(color = "black")+
+  geom_point(data = pnm_clean2 %>% filter(core_name == "FOR_01" & 
+                               Coordination.Number > 20  & 
+                               grepl("T", timepoint) &
+                               timepoint %in% c("T0", "T3")
+                             ),
+             color = '#ed8b00')+
+  facet_wrap(~timepoint, nrow = 1)+
+  scale_size(range = c(2, 6))+
+  theme(legend.position = "none",
+        axis.text = element_blank(),
+        axis.title = element_blank())
+
+
+
+xct_pnm_processed %>% filter(core_name == "FOR_04" & 
+                               Coordination.Number == 0  & 
+                               grepl("T", timepoint) &
+                               timepoint %in% c("T0", "T3")
+                             ) %>% 
+  ggplot(aes(x = X.Coord, y = Z.Coord, size = EqRadius))+
+  geom_point(color = "black")+
+  geom_point(data = pnm_clean2 %>% filter(core_name == "FOR_04" & 
+                               Coordination.Number > 20  & 
+                               grepl("T", timepoint) &
+                               timepoint %in% c("T0", "T3")
+                             ),
+             color = '#ed8b00')+
+  facet_wrap(~timepoint, nrow = 1)+
+  scale_size(range = c(2, 6))+
+  theme(legend.position = "none",
+        axis.text = element_blank(),
+        axis.title = element_blank())
+
+  
+
+
+```
+
+
+```{r pnm_coordination_map_throats}
+
+throats = 
+  pnm_clean2 %>% 
+  dplyr::select(core_name, water_treatment, timepoint,
+                Throat.ID, EqRadius.1, Pore.ID..1, Pore.ID..2)
+
+
+pores =
+  pnm_clean2 %>% 
+#  filter(Coordination.Number == 0 | Coordination.Number > 20) %>% 
+  dplyr::select(core_name, water_treatment, timepoint,
+                Pore.ID, X.Coord, Z.Coord, Coordination.Number)
+
+
+
+throats2 = 
+  throats %>% 
+  left_join(pores, by = c("core_name", "water_treatment", "timepoint", "Pore.ID..1" = "Pore.ID")) %>% 
+  rename(x1 = X.Coord, 
+         z1 = Z.Coord) %>% 
+  left_join(pores, by = c("core_name", "water_treatment", "timepoint", "Pore.ID..2" = "Pore.ID")) %>% 
+  rename(x2 = X.Coord, 
+         z2 = Z.Coord) %>% 
+  filter(Coordination.Number.x == 0 | Coordination.Number.x > 20 | Coordination.Number.y == 0 | Coordination.Number.y > 20)
+
+
+
+throats2 %>% 
+  filter(core_name == "FOR_04" & 
+                               timepoint %in% c("T0", "T3")) %>% 
+  ggplot()+
+  geom_segment(aes(x = x1, y = z1, xend = x2, yend = z2),
+               #color = "#ed8b00", 
+               color = "black",
+               alpha = 0.3)+
+  facet_wrap(~ timepoint)+
+  
+
+#  geom_point(data = xct_pnm_processed %>% filter(core_name == "FOR_04" & 
+#                               Coordination.Number == 0  & 
+#                               grepl("T", timepoint) &
+#                               timepoint %in% c("T0", "T3")
+#                             ),
+#             aes(x = X.Coord, y = Z.Coord, size = EqRadius),
+#             color = "black")+
+  geom_point(data = pnm_clean2 %>% filter(core_name == "FOR_04" & 
+                               Coordination.Number > 20  & 
+                               grepl("T", timepoint) &
+                               timepoint %in% c("T0", "T3")
+                             ),
+             aes(x = X.Coord, y = Z.Coord, size = EqRadius),
+             color = '#ed8b00')+
+ # facet_wrap(~timepoint, nrow = 1)+
+  scale_size(range = c(2, 6))+
+  theme(legend.position = "none",
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank())
+
+
+throats2 %>% 
+  filter(core_name == "FOR_01" & 
+                               timepoint %in% c("T0", "T3")) %>% 
+  ggplot()+
+  geom_segment(aes(x = x1, y = z1, xend = x2, yend = z2),
+               #color = "#ed8b00", 
+               color = "black",
+               alpha = 0.3)+
+  facet_wrap(~timepoint)+
+  
+
+#  geom_point(data = xct_pnm_processed %>% filter(core_name == "FOR_01" & 
+#                               Coordination.Number == 0  & 
+#                               grepl("T", timepoint) &
+#                               timepoint %in% c("T0", "T3")
+#                             ),
+#             aes(x = X.Coord, y = Z.Coord, size = EqRadius),
+#             color = "black")+
+  geom_point(data = pnm_clean2 %>% filter(core_name == "FOR_01" & 
+                               Coordination.Number > 20  & 
+                               grepl("T", timepoint) &
+                               timepoint %in% c("T0", "T3")
+                             ),
+             aes(x = X.Coord, y = Z.Coord, size = EqRadius),
+             color = '#ed8b00')+
+ # facet_wrap(~timepoint, nrow = 1)+
+  scale_size(range = c(2, 6))+
+  theme(legend.position = "none",
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank())
+  
+
+```
+
+
+
+```{r}
+throats2 %>% 
+  filter(core_name == "FOR_01") %>% 
+  ggplot()+
+  geom_segment(aes(x = x1, y = z1, xend = x2, yend = z2),
+               #color = "#ed8b00", 
+               color = "black",
+               alpha = 0.2)+
+  facet_grid(core_name ~ timepoint)
+```
+
+
+
 
 ## Summaries
 
@@ -172,52 +334,61 @@ xct_summary2 %>%
 
 ```
 
-```{r}
-# coordinations
-
-xct_pnm_processed %>% filter(core_name == "FOR_01" & 
-                               Coordination.Number == 0  & 
-                               grepl("T", timepoint) &
-                               timepoint %in% c("T0", "T3")
-                             ) %>% 
-  ggplot(aes(x = X.Coord, y = Z.Coord, size = EqRadius))+
-  geom_point(color = "black")+
-  geom_point(data = pnm_clean2 %>% filter(core_name == "FOR_01" & 
-                               Coordination.Number > 20  & 
-                               grepl("T", timepoint) &
-                               timepoint %in% c("T0", "T3")
-                             ),
-             color = '#ed8b00')+
-  facet_wrap(~timepoint, nrow = 1)+
-  scale_size(range = c(2, 6))+
-  theme(legend.position = "none",
-        axis.text = element_blank(),
-        axis.title = element_blank())
 
 
 
-xct_pnm_processed %>% filter(core_name == "FOR_04" & 
-                               Coordination.Number == 0  & 
-                               grepl("T", timepoint) &
-                               timepoint %in% c("T0", "T3")
-                             ) %>% 
-  ggplot(aes(x = X.Coord, y = Z.Coord, size = EqRadius))+
-  geom_point(color = "black")+
-  geom_point(data = pnm_clean2 %>% filter(core_name == "FOR_04" & 
-                               Coordination.Number > 20  & 
-                               grepl("T", timepoint) &
-                               timepoint %in% c("T0", "T3")
-                             ),
-             color = '#ed8b00')+
-  facet_wrap(~timepoint, nrow = 1)+
-  scale_size(range = c(2, 6))+
-  theme(legend.position = "none",
-        axis.text = element_blank(),
-        axis.title = element_blank())
+# RESPIRATION
 
-  
+```{r licor_ppm}
+
+licor_processed_rates %>% 
+  mutate(timepoint = factor(timepoint, levels = c("t0", "ftc1", "ftc2", "ftc3"))) %>% 
+  filter(water_treatment != "ambient") %>% 
+  filter(!is.na(timepoint)) %>% 
+  filter(elapsed_hr < 20) %>% 
+  filter(!core_name %in% c("FOR_20", "FOR_21")) %>% 
+  ggplot(aes(x = elapsed_hr, y = co2_max_ppm, group = core_name, color = water_treatment))+
+  geom_line()+
+  facet_grid(water_treatment+core_name ~ timepoint, scales = "free_x")
 
 
 ```
 
+```{r licor_ppm_smooth}
+
+licor_processed_rates %>% 
+  mutate(timepoint = factor(timepoint, levels = c("t0", "ftc1", "ftc2", "ftc3"))) %>% 
+  filter(water_treatment != "ambient") %>% 
+  filter(!is.na(timepoint)) %>% 
+  filter(elapsed_hr < 20) %>% 
+  # filter(datetime >= ymd_hms("2025-02-18 13:00:00") & datetime <= ymd_hms("2025-02-18 19:00:00")) %>% 
+  filter(!core_name %in% c("FOR_10", "FOR_20", "FOR_21")) %>% 
+  ggplot(aes(x = elapsed_hr, y = co2_max_ppm, group = core_name, color = water_treatment))+
+  geom_line(alpha = 0.5)+
+  geom_smooth(se = F, aes(group = water_treatment), linewidth = 2)+
+  facet_grid(. ~ timepoint, scales = "free_x")
+
+```
+
+```{r licor_cumulative, fig.height=6, fig.width=8}
+licor_cumulative = licor_cumulative %>% 
+  mutate(timepoint = toupper(timepoint),
+         timepoint = factor(timepoint, levels = c("T0", "FTC1", "FTC2", "FTC3")),
+         water_treatment = factor(water_treatment, levels = c("low water", "high water")))
+
+
+licor_cumulative %>% 
+  filter(core_name %in% c("FOR_07", "FOR_08", "FOR_09", "FOR_11", "FOR_12")) %>% 
+  group_by(water_treatment, timepoint) %>% 
+  dplyr::summarise(mean = mean(co2_umol_cum)) %>% 
+  ggplot(aes(x = timepoint, y = mean, fill = (water_treatment)))+
+  geom_bar(stat = "identity", width = 0.3, position = position_dodge(width = 0.5), color = "black")+
+  scale_fill_manual(values = c( "#CEA07E", "#155CA2"))+
+  labs(y = "Cumulative CO2 evolved, μmol",
+       fill = "",
+       x = "")+
+  theme(legend.position = c(0.8, 0.8))
+
+
+```
 
