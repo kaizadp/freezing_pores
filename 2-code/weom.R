@@ -100,50 +100,7 @@ process_mbc = function(mbc_data, subsampling){
    
 }
 
-
-# plot
-
-plot_weoc = function(weoc_processed){
-  
-  weoc_processed %>% 
-    filter(tube_type == "destructive cores") %>% 
-    ggplot(aes(x = ftc, y = npoc_ugg, color = water_treatment))+
-    geom_point(size = 3)
-  
-  weoc_processed %>% 
-    filter(tube_type == "destructive cores") %>% 
-    ggplot(aes(x = ftc, y = tn_ugg, color = water_treatment))+
-    geom_point(size = 3)
-  
-  weoc_processed %>% 
-    filter(tube_type == "GHG cores" | ftc == "t0") %>% 
-    ggplot(aes(x = ftc, y = npoc_ugg, color = water_treatment))+
-    geom_point(size = 3)
-  
-}
-
-plot_mbc = function(mbc_processed){
-  
-  mbc_processed %>% 
-    filter(tube_type == "destructive cores") %>% 
-    ggplot(aes(x = ftc, y = mbc_ugg, color = water_treatment))+
-    geom_point(size = 3)
-  
-  mbc_processed %>% 
-    filter(tube_type == "destructive cores") %>% 
-    ggplot(aes(x = ftc, y = mbn_ugg, color = water_treatment))+
-    geom_point(size = 3)
-  
-  mbc_processed %>% 
-    filter(tube_type == "GHG cores" | ftc == "t0") %>% 
-    ggplot(aes(x = ftc, y = mbc_ugg, color = water_treatment))+
-    geom_point(size = 3)
-  
-  
-}
-
-
-
+#
 # -------------------------------------------------------------------------
 
 suva_fn = function(){

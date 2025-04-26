@@ -392,3 +392,64 @@ licor_cumulative %>%
 
 ```
 
+
+
+# WEOM
+
+```{r}
+
+weoc_processed = 
+  weoc_processed %>% 
+  mutate(ftc = toupper(ftc),
+         ftc = factor(ftc, levels = c("T0", "FTC1", "FTC2", "FTC3")),
+         water_treatment = paste(water_treatment, "water"),
+         water_treatment = factor(water_treatment, levels = c("low water", "high water")))
+
+
+  weoc_processed %>% 
+    filter(tube_type == "destructive cores") %>% 
+    ggplot(aes(x = ftc, y = npoc_ugg, color = water_treatment))+
+    geom_point(size = 4)+
+    scale_color_manual(values = c( "#CEA07E", "#155CA2"))+
+      labs(y = "Water-extractable organic C (μg/g)
+           ",
+       color = "",
+       x = "")
+
+  
+#  weoc_processed %>% 
+#    filter(tube_type == "destructive cores") %>% 
+#    ggplot(aes(x = ftc, y = tn_ugg, color = water_treatment))+
+#    geom_point(size = 3)
+#  
+#  weoc_processed %>% 
+#    filter(tube_type == "GHG cores" | ftc == "t0") %>% 
+#    ggplot(aes(x = ftc, y = npoc_ugg, color = water_treatment))+
+#    geom_point(size = 3)
+  
+
+```
+
+
+```{r}
+
+
+  
+  mbc_processed %>% 
+    filter(tube_type == "destructive cores") %>% 
+    ggplot(aes(x = ftc, y = mbc_ugg, color = water_treatment))+
+    geom_point(size = 3)
+  
+  mbc_processed %>% 
+    filter(tube_type == "destructive cores") %>% 
+    ggplot(aes(x = ftc, y = mbn_ugg, color = water_treatment))+
+    geom_point(size = 3)
+  
+  mbc_processed %>% 
+    filter(tube_type == "GHG cores" | ftc == "t0") %>% 
+    ggplot(aes(x = ftc, y = mbc_ugg, color = water_treatment))+
+    geom_point(size = 3)
+  
+  
+```
+
