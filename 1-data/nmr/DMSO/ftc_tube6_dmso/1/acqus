@@ -1,10 +1,10 @@
 ##TITLE= Parameter file, TopSpin 3.6.0
 ##JCAMPDX= 5.0
 ##DATATYPE= Parameter Values
-##NPOINTS= 50	$$ modification sequence number
+##NPOINTS= 213	$$ modification sequence number
 ##ORIGIN= Bruker BioSpin GmbH
 ##OWNER= nmr
-$$ 2025-04-24 00:33:21.441 -0700  nmr@bsf2231
+$$ 2025-04-24 04:11:55.591 -0700  nmr@bsf2231
 $$ C:/Bruker/TopSpin3.6.0/data/kpatel/nmr/ftc_tube6_dmso/1/acqus
 $$ process C:\Bruker\TopSpin3.6.0\prog\mod\go4.exe
 ##$ACQT0= -2.87673401723379
@@ -41,7 +41,7 @@ $$ process C:\Bruker\TopSpin3.6.0\prog\mod\go4.exe
 ##$D= (0..63)
 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0002 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-##$DATE= 1745480001
+##$DATE= 1745493115
 ##$DE= 6.5
 ##$DECBNUC= <off>
 ##$DECIM= 2496
@@ -140,7 +140,7 @@ $$ process C:\Bruker\TopSpin3.6.0\prog\mod\go4.exe
 ##$NC= -6
 ##$NLOGCH= 1
 ##$NOVFLW= 0
-##$NS= 640
+##$NS= 3200
 ##$NUC1= <1H>
 ##$NUC2= <off>
 ##$NUC3= <off>
@@ -316,8 +316,8 @@ $$ process C:\Bruker\TopSpin3.6.0\prog\mod\go4.exe
 0 0 0 0
 ##$XL= 0
 ##$YL= 0
-##$YMAX_a= 0
-##$YMIN_a= 0
+##$YMAX_a= 236340587
+##$YMIN_a= -94350207
 ##$ZGOPTNS= <>
 ##$ZL1= 120
 ##$ZL2= 120

@@ -2,7 +2,7 @@
 ##JCAMPDX= 5.01
 ##ORIGIN= Bruker BioSpin GmbH
 ##OWNER= nmr
-$$ C:/Bruker/TopSpin3.6.0/data/kpatel/nmr/ftc_tube6_dmso/1/audita.txt
+$$ C:/Bruker/TopSpin3.6.0/data/kpatel/nmr/ftc_tube6_dmso/1/pdata/1/auditp.txt
 ##AUDIT TRAIL=  $$ (NUMBER, WHEN, WHO, WHERE, PROCESS, VERSION, WHAT)
 (   1,<2025-04-24 04:11:55.591 -0700>,<nmr>,<bsf2231>,<go4>,<TopSpin 3.6.0>,
       <created by zg
@@ -17,7 +17,20 @@ $$ C:/Bruker/TopSpin3.6.0/data/kpatel/nmr/ftc_tube6_dmso/1/audita.txt
        ICON-NMR User ID: kpatel
        data hash MD5: 64K
        CC 24 32 93 1D EA 63 42 B8 F9 58 4B 29 CC 63 29>)
+(   3,<2025-04-24 04:11:58.169 -0700>,<nmr>,<bsf2231>,<proc1d>,<TopSpin 3.6.0>,
+      <Start of raw data processing
+       ef LB = 0.3 FT_mod = 6 PKNL = 1 SI = 64K 
+       data hash MD5: 64K
+       9D 0D 98 2F 04 C7 DF CD 29 5C F9 FD 00 0F 4D 94>)
+(   4,<2025-04-24 04:11:58.481 -0700>,<nmr>,<bsf2231>,<proc1d>,<TopSpin 3.6.0>,
+      <apk 
+       data hash MD5: 64K
+       9A B9 E7 D1 4C 58 C3 41 11 27 9C C3 E0 27 CE 05>)
+(   5,<2025-04-24 04:11:58.591 -0700>,<nmr>,<bsf2231>,<proc1d>,<TopSpin 3.6.0>,
+      <abs ABSG = 5 
+       data hash MD5: 64K
+       CD 17 7F AF 9F 0F 6B 68 90 14 93 EE 1D 5B 0F 39>)
 ##END=
 
 $$ hash MD5
-$$ C6 A8 7C 78 9D FB 35 4F 2F D9 70 99 E4 6F 91 C6
+$$ BE FA C8 93 63 E2 C4 73 DA BB 2B A4 2F ED E7 55
