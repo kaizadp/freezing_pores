@@ -46,16 +46,16 @@ process_weoc = function(weoc_data, subsampling){
            od_g = wt_WEOM_g/((gravimetric_water_percent/100)+1),
            soilwater_g = wt_WEOM_g - od_g,
            npoc_ugg = npoc_mgL * ((vol_WEOM_mL + soilwater_g)/od_g),
-           npoc_ugg = round(npoc_ugg, 2),
+           WEOC_ugg = round(npoc_ugg, 2),
            tn_ugg = tn_mgL * ((vol_WEOM_mL + soilwater_g)/od_g),
-           tn_ugg = round(tn_ugg, 2)) %>% 
+           TDN_ugg = round(tn_ugg, 2)) %>% 
     mutate(water_treatment = case_when(grepl("FOR_07|FOR_08|FOR_09|FOR_20", tube_name) ~ "low",
                                        grepl("FOR_10|FOR_11|FOR_12|FOR_21", tube_name) ~ "high",
                                        .default = water_treatment))
   
   npoc_processed = 
     npoc_samples %>% 
-    dplyr::select(tube_name, water_treatment, tube_type, ftc, npoc_ugg, tn_ugg) %>% 
+    dplyr::select(tube_name, water_treatment, tube_type, ftc, WEOC_ugg, TDN_ugg) %>% 
     mutate(ftc = factor(ftc, levels = c("t0", "ftc1", "ftc2", "ftc3")))
   
 }
@@ -85,17 +85,17 @@ process_mbc = function(mbc_data, subsampling){
     mutate(od_g = wt_MBC_g/((gravimetric_water_percent/100)+1),
            soilwater_g = wt_MBC_g - od_g,
            mbc_ugg = npoc_mgL * ((vol_MBC_mL + soilwater_g)/od_g),
-           mbc_ugg = round(mbc_ugg, 2),
+           MBC_ugg = round(mbc_ugg, 2),
            
            mbn_ugg = tn_mgL * ((vol_MBC_mL + soilwater_g)/od_g),
-           mbn_ugg = round(mbn_ugg, 2)) %>% 
+           MBN_ugg = round(mbn_ugg, 2)) %>% 
     mutate(water_treatment = case_when(grepl("FOR_07|FOR_08|FOR_09|FOR_20", tube_name) ~ "low",
                                        grepl("FOR_10|FOR_11|FOR_12|FOR_21", tube_name) ~ "high",
                                        .default = water_treatment))
  
   mbc_processed = 
     mbc_samples %>% 
-    dplyr::select(tube_name, water_treatment, tube_type, ftc, mbc_ugg, mbn_ugg) %>% 
+    dplyr::select(tube_name, water_treatment, tube_type, ftc, MBC_ugg, MBN_ugg) %>% 
     mutate(ftc = factor(ftc, levels = c("t0", "ftc1", "ftc2", "ftc3")))
    
 }
@@ -129,4 +129,43 @@ suva_fn = function(){
     ggplot(aes(x = ftc, y = suva, color = water_treatment, group = tube_name))+
     geom_point(size = 4)+
     facet_wrap(~water_treatment)
+}
+
+
+
+# -------------------------------------------------------------------------
+
+# TC-TN
+
+import_tctn = function(FILEPATH, PATTERN){
+  
+  filePaths_weoc <- list.files(path = FILEPATH, pattern = PATTERN, full.names = TRUE)
+  tctn_dat <- do.call(bind_rows, lapply(filePaths_weoc, function(path) {
+    df <- read_csv(path)
+    df}))
+  
+  
+}
+process_tctn = function(tctn_data, subsampling){
+  
+  tctn_data %>% 
+    janitor::clean_names() %>% 
+    dplyr::select(name, n_percent, c_percent) %>% 
+    rename(tube_name = name,
+           TotalC_percent = c_percent,
+           TotalN_percent = n_percent) %>% 
+    left_join(subsampling %>% dplyr::select(tube_name, water_treatment, ftc)) %>% 
+    filter(!is.na(ftc))
+  
+}
+
+#
+
+# -------------------------------------------------------------------------
+
+combine_chemistry_data = function(weoc_processed, mbc_processed, tctn_processed){
+  
+  weoc_processed %>% 
+    left_join(mbc_processed) %>% 
+    left_join(tctn_processed)
 }

@@ -41,6 +41,10 @@ list(
   tar_target(mbc_data, import_weoc_mbc(FILEPATH = "1-data/mbc", PATTERN = "summary")),
   tar_target(mbc_processed, process_mbc(mbc_data, subsampling)),
   
+  # tc-tn
+  tar_target(tctn_data, import_tctn(FILEPATH = "1-data/tctn", PATTERN = ".csv")),
+  tar_target(tctn_processed, process_tctn(tctn_data, subsampling)),
+  
   # xct
   ## xct summary files
   tar_target(xct_summary, import_xct_summaries(FILEPATH = "1-data/xct/csv-summary", PATTERN = ".csv")),
@@ -49,6 +53,9 @@ list(
   ## xct pnm files
   tar_target(xct_pnm, import_xct_pnm(FILEPATH = "1-data/xct/csv-pnm", PATTERN = ".csv")),
   tar_target(xct_pnm_processed, process_xct_pnm(xct_pnm, corekey)),
+  
+  # combined chemistry data
+  tar_target(combined_chemistry, combine_chemistry_data(weoc_processed, mbc_processed, tctn_processed)),
   
   tar_render(report, path = "3-reports/egu25.Rmd")
   
