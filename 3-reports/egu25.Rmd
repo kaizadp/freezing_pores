@@ -1,7 +1,9 @@
 ---
 title: "Untitled"
-output: html_document
-date: "2025-04-20"
+output: 
+  github_document:
+  html_preview: true
+
 ---
 
 ```{r setup, include=FALSE}
@@ -453,3 +455,17 @@ weoc_processed =
   
 ```
 
+---
+
+## Session Info 
+
+<details>
+  <summary> Session Info </summary>
+
+Date run: `r Sys.Date()`
+
+```{r}
+sessionInfo()
+```
+
+</details>
