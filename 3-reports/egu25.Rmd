@@ -408,7 +408,7 @@ weoc_processed =
 
   weoc_processed %>% 
     filter(tube_type == "destructive cores") %>% 
-    ggplot(aes(x = ftc, y = npoc_ugg, color = water_treatment))+
+    ggplot(aes(x = ftc, y = WEOC_ugg, color = water_treatment))+
     geom_point(size = 4)+
     scale_color_manual(values = c( "#CEA07E", "#155CA2"))+
       labs(y = "Water-extractable organic C (μg/g)
@@ -437,17 +437,17 @@ weoc_processed =
   
   mbc_processed %>% 
     filter(tube_type == "destructive cores") %>% 
-    ggplot(aes(x = ftc, y = mbc_ugg, color = water_treatment))+
+    ggplot(aes(x = ftc, y = MBC_ugg, color = water_treatment))+
     geom_point(size = 3)
   
   mbc_processed %>% 
     filter(tube_type == "destructive cores") %>% 
-    ggplot(aes(x = ftc, y = mbn_ugg, color = water_treatment))+
+    ggplot(aes(x = ftc, y = MBN_ugg, color = water_treatment))+
     geom_point(size = 3)
   
   mbc_processed %>% 
     filter(tube_type == "GHG cores" | ftc == "t0") %>% 
-    ggplot(aes(x = ftc, y = mbc_ugg, color = water_treatment))+
+    ggplot(aes(x = ftc, y = MBC_ugg, color = water_treatment))+
     geom_point(size = 3)
   
   
