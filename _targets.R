@@ -57,6 +57,14 @@ list(
   # combined chemistry data
   tar_target(combined_chemistry, combine_chemistry_data(weoc_processed, mbc_processed, tctn_processed)),
   
+  tar_target(export, {
+    write.csv(combined_chemistry, "1b-data_processed/chemistry_combined.csv", row.names = FALSE, na = "")
+    crunch::write.csv.gz(licor_processed_ppm, "1b-data_processed/respiration_ppm.csv.gz", row.names = FALSE, na = "")
+    crunch::write.csv.gz(xct_pnm_processed, "1b-data_processed/xct_pore_network_model.csv.gz", row.names = FALSE, na = "")
+    write.csv(xct_summary_processed, "1b-data_processed/xct_summary.csv", row.names = FALSE, na = "")
+    
+  }, format = "file"),
+  
   tar_render(report, path = "3-reports/egu25.Rmd")
   
   
