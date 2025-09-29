@@ -1,0 +1,446 @@
+---
+title: "distribution"
+author: "Jianqiu Zheng"
+date: "8/25/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(reshape2)
+library(dplyr)
+library(ggpubr)
+library(scales)
+library(MASS) # to access Animals data sets
+library(scales) # to access break formatting functions
+library(ggplot2)
+library(ggallin)
+
+
+#library(ggbreak) ##create y-axis breaks
+#library(cowplot)##create y-axis breaks
+#library(gg.gap)##create y-axis breaks
+#library(plotrix)##create y-axis breaks
+#library(data.table)##create y-axis breaks
+#library(tidyverse)
+#library(tidypaleo)
+```
+
+
+##load data##
+```{R edonor}
+pore_data<-read.csv("pnm_FOR_04_d_F2.csv")
+
+##create a pore lookup table
+pore_rad_temp<- pore_data[, c("Pore.ID","Pore_rad")]
+pore_rad<-pore_rad_temp[complete.cases(pore_rad_temp),]
+pore_rad$Pore.ID<-pore_rad$Pore.ID+1
+
+throat_temp<-pore_data[, c("ChannelLength..mm.", "Pore1","Pore2")]
+colnames(throat_temp)<-c("ChannLength","Pore1","Pore2")
+throat_temp$rad1<-pore_rad[pore_data$Pore1+1,2]
+throat_temp$rad2<-pore_rad[pore_data$Pore2+1,2]
+throat_temp$diff<-throat_temp$ChannLength+0.5*(throat_temp$rad1+throat_temp$rad2)
+
+write.csv(throat_temp,"04d_F2.csv")
+
+
+plot1<-ggplot()+ 
+geom_histogram(throat_temp,mapping=aes(x=diff),binwidth=0.001,alpha=0.2, position="identity")
+plot1
+
+```
+
+
+##load data##
+```{R edonor}
+data1<-read.csv("04d_F2.csv")
+data2<-read.csv("04e_T2.csv")
+
+data1$trt<-c("F2")
+data2$trt<-c("T2")
+
+
+comb<-rbind(data1,data2)
+
+plot1<-ggplot()+ 
+geom_histogram(comb,mapping=aes(x=diff, color=trt,fill=trt),binwidth=0.1,alpha=0.2, position="identity")+
+  #geom_density(aes(color=variable),adjust=2, size=1)+
+  #scale_x_continuous(limits=c(3,8))+
+   #scale_y_continuous(limits=c(0,400))+
+  #scale_y_continuous(limits=c(0, 3e-3),breaks=seq(0,3e-3, by=1e-3))+
+  scale_fill_manual(values = c("#E7B800","#0073C2FF", "#FC4E07","#00AFBB"), labels=c("F2","T2")) +
+  scale_color_manual(values = c("#E7B800","#0073C2FF"), labels=c("F2","T2"))+
+  theme_pubr(border=TRUE)+theme(legend.position=c(0.85,0.75),legend.title=element_blank())
+plot1
+
+pdf("F2_T2_diffusion.pdf", width=5, height=3)
+plot1
+dev.off() 
+
+#-------
+data1<-read.csv("pnm_FOR_04_a_T0.csv")
+data2<-read.csv("pnm_FOR_04_b_F1.csv")
+data3<-read.csv("pnm_FOR_04_d_F2.csv")
+data4<-read.csv("pnm_FOR_04_f_F3.csv")
+
+data1<-data1[, c("Pore_rad","Throat_rad")]
+data2<-data2[, c("Pore_rad","Throat_rad")]
+data3<-data3[, c("Pore_rad","Throat_rad")]
+data4<-data4[, c("Pore_rad","Throat_rad")]
+
+data1$trt<-c("aT0")
+data2$trt<-c("F1")
+data3$trt<-c("F2")
+data4$trt<-c("F3")
+
+
+final<-rbind(data1, data2, data3, data4)
+
+
+plot1<-ggplot()+ 
+geom_histogram(final,mapping=aes(x=Throat_rad, color=trt, fill=trt), binwidth=0.02,alpha=0.1, position="identity")+
+  scale_fill_manual(values = c("#E7B800","#0073C2FF", "#FC4E07","#199a69"),labels=c("T0","F1","F2","F3")) +
+  scale_x_continuous(limits=c(0,1))+
+  scale_color_manual(values = c("#E7B800","#0073C2FF", "#FC4E07","#199a69"),labels=c("T0","F1","F2","F3"))+
+  theme_pubr(border=TRUE)+theme(legend.position=c(0.85,0.75),legend.title=element_blank())
+plot1
+
+pdf("allF_throat.pdf", width=4.5, height=3)
+plot1
+dev.off() 
+
+
+
+
+
+
+
+poredis<-read.csv("poredis2.csv")
+
+poredis$wild<-poredis$wild/0.809
+poredis$cul<-poredis$cul/0.664
+
+colnames(poredis)<-c('dis',"Cultivated","Wild")
+test<-reshape2::melt(poredis, id.var="dis")
+#test$dis<-as.factor(test$dis)
+
+plot2<-ggplot(data=test, aes(x=dis, y=value, color=variable, fill=variable))+ 
+geom_bar(stat="identity", width=50,position=position_dodge(), alpha=0.5)+
+  #geom_density(aes(color=variable),adjust=2, size=1)+
+  scale_x_continuous(limits=c(0,1000))+
+   #scale_y_continuous(limits=c(0,400))+
+  #scale_y_continuous(limits=c(0, 3e-3),breaks=seq(0,3e-3, by=1e-3))+
+  scale_fill_manual(values = c("#E7B800","#0073C2FF", "#FC4E07","#00AFBB")) +
+  scale_color_manual(values = c("#E7B800","#0073C2FF", "#FC4E07","#00AFBB"))+
+  theme_pubr(border=TRUE)+theme(legend.position=c(0.85,0.75),legend.title=element_blank(), axis.title.x=element_blank(), axis.title.y=element_blank()) #theme(panel.grid.minor.x=element_line(linetype="dashed", color="gray",size=0.2))+
+  #theme(panel.grid.major.x=element_line(linetype="dashed", color="gray",size=0.2))
+## blue, red, yellow:  "#0073C2FF", "#FC4E07","#E7B800"
+plot2
+
+pdf("distance.pdf", width=5, height=3)
+plot2
+dev.off() 
+
+```
+
+
+
+
+###spatial distance
+```{r probobility}
+##create the log normal distribution
+y=rnorm(1000,-4,0.25) #define stdev as 0.25,1,2 
+delta<-10^(y) ##diffusion distance
+std<-sd(delta)  ##2.460979e-05
+
+ind<-(sum(delta^3)/1000)^(1/3)##average distance 1e-4
+totv<-sum(delta^3)  #1.249443e-09
+
+median(delta)
+mean(delta)
+#delta[delta<5e-5]<-0
+
+test<-data.frame(y=y)
+test$dist<-delta
+
+index<-seq(1,1000,1)
+test<-data.frame(index=index)
+test$dis<-delta
+ptest<-melt(test, id.vars="index")
+
+p1<-ggplot(ptest, aes(x=index, y=value, color=variable))+geom_point(aes(color=variable), shape=21, size=0.8, stroke=0.2) + scale_color_manual(values=c("#7f3b08","#542788"))+
+  scale_y_log10(name="Distance (m)",limits=c(10^-5, 10^-3),breaks = c(10^-5, 10^-4, 10^-3),
+              labels = trans_format("log10", math_format(10^.x)))
+
+p2<-p1+theme_linedraw()+theme(panel.background = element_rect(fill = "transparent",colour = NA),
+                                    plot.background = element_rect(fill = "transparent",colour = NA),
+                                    panel.grid.major = element_blank(), panel.grid.minor = element_blank(), legend.position = "none")+
+  theme(text = element_text(size=10))
+print(p2)
+
+
+#pdf("delta1.pdf", width=1.8, height=2)
+p2
+#dev.off()
+
+#####
+
+y1=rnorm(1000,-4,0.5) #define stdev as 0.25, 0.5, 1 
+doc<-10^(y1) ##diffusion distance
+mean(doc)
+sd(doc)
+
+index<-seq(1,1000,1)
+test<-data.frame(index=index)
+test$dis<-delta
+test$con<-doc
+ptest<-melt(test, id.vars="index")
+
+p3<-ggplot(ptest, aes(x=index, y=value, color=variable))+geom_point(aes(color=variable), shape=21, size=0.8, stroke=0.2) + scale_color_manual(values=c("#7f3b08","#542788"))+
+  scale_y_log10(name=" Csoil (M)",limits=c(10^-6, 10^-2),breaks = c(10^-6, 10^-4, 10^-2),
+              labels = trans_format("log10", math_format(10^.x)))
+
+
+
+
+p4<-p3+theme_linedraw()+theme(panel.background = element_rect(fill = "transparent",colour = NA),
+                                    plot.background = element_rect(fill = "transparent",colour = NA),
+                                    panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  theme(text = element_text(size=10),legend.position = "none")
+print(p4)
+
+#pdf("doc.pdf", width=1.8, height=2)
+p4
+#dev.off()
+
+#######vmax
+y2=rnorm(1000,-5.5,0.5) #define stdev as 0.25, 0.5, 1 
+vmax<-10^(y2) ##diffusion distance
+mean(vmax)
+sd(vmax)
+index<-seq(1,1000,1)
+test<-data.frame(index=index)
+test$vm<-vmax
+ptest<-melt(test, id.vars="index")
+
+p5<-ggplot(ptest, aes(x=index, y=value, color=variable))+geom_point(aes(color=variable), shape=21, size=0.8, stroke=0.2) + scale_color_manual(values=c("#7f3b08","#542788"))+
+  scale_y_log10(name="Vmax (d-1)",limits=c(10^-7, 10^-4),breaks = c(10^-7, 10^-6, 10^-5,10^-4),
+              labels = trans_format("log10", math_format(10^.x)))
+
+p6<-p5+theme_linedraw()+theme(panel.background = element_rect(fill = "transparent",colour = NA),
+                                    plot.background = element_rect(fill = "transparent",colour = NA),
+                                    panel.grid.major = element_blank(), panel.grid.minor = element_blank(), legend.position = "none")+
+  theme(text = element_text(size=10))
+print(p6)
+
+
+#pdf("vmax2.pdf", width=1.5, height=2)
+p6
+#dev.off()
+
+
+```
+
+
+
+```{r testing}
+#===========create dataset====================
+#wild po=0.505, org=0.026, bd=1.32,
+#cultivated  po=0.25, org=0.053, bd=1.5 ??
+
+rs<-seq(0.1,0.9,0.01)
+po<-0.3
+org<-0.026
+mvol<-po*rs
+bd<-1.5
+soc<-org/12*bd*1e-3  #assum ss 1% as DOC  (mol/cm3) and 10% of these DOC are accessible
+oxy<-(po-mvol)*0.2*0.04  #in mol/L
+  
+#soc<-1e-6 # in mol DOC /cm3 soil (=1000 uM)---0.023
+#oxy<-1e-6 # in mol/cm3 (=1000 uM)
+theta<-mvol/0.8#thaR=0,thaS=0.7
+t1<-theta^(-1/0.33)-1#n=1.5, alpha=0.03, m=0.33
+t2<-t1^(1/1.5)/0.03
+data<-data.frame(rs=rs)
+data$mvol<-mvol
+data$po<-po
+data$bd<-bd
+data$mp<-t2
+data$soc<-soc
+data$oxy<-oxy
+
+soc0<-soc
+
+for (i in 1:length(data$soc)){
+alpha<-runif(n=1, min=0.95, max=1.05)
+data$soc[i]<-soc0*alpha
+}
+
+
+
+
+#silt loam po=0.58, org=0.022, bd=1.1, clay=0.17
+#sandy loam po=0.86, org=0.126, bd=0.46, clay=0.04
+#silt clay po=0.62, org=0.016, bd=1, clay=0.46
+poredis<-read.csv("poredis2.csv")
+delta<-poredis$dis/0.66
+```
+
+
+# normalized microbial uptake per colony
+```{r distribution}
+#====Mass transfer distance====
+solveCSS<-function(mvol,po,bd,delta,soc,oxy,kmc,kmo,vmax){
+  Ds0=1.4e-9 #(glucose 10^-11) #aqueous tracer diffusivity at 25 (m2/s)
+  Dg0=2.1e-5#oxygen diffusivity in water
+  fDg<-(po)^1.5*((po-mvol)/(po))^2.5 #gas phase relative diffusivity
+  fDs<-(po)^1.5*((mvol)/(po))^2.5 #aqueous phase relative diffusivity
+  H_o2<-1.3e-6  #mol/cm3/atm
+  hs<-6/(mvol+bd*10)*Ds0*fDs/(delta^2) #DOM delivery (mass transfer rate in d-1)
+  hg<-6/(mvol+bd*1)*Dg0*fDg*H_o2/(delta^2)  #DO delivery (mass transfer rate)
+  ac<-kmc/soc #Km/Csoil
+  bc<-vmax/(hs*soc)#Fuptake/Fdiff
+  t1c<-(1-4*bc/(1+ac+bc)^2)^0.5
+  F1c<-(1+ac+bc)/2/bc*(1-t1c) #uptake flux
+  css<-F1c*kmc/(1-F1c) #steady state concentration
+  cstar<-soc/(soc+kmc+vmax/hs)
+  ag<-kmo/oxy
+  bg<-vmax/(hg*oxy)
+  t1g<-(1-4*bg/(1+ag+bg)^2)^0.5
+  F1g<-(1+ag+bg)/2/bg*(1-t1g)
+  oss<-F1g*kmo/(1-F1g)
+  rate<-vmax*css/(css+kmc)*oss/(oss+kmo) 
+  KI<-2e-6
+  fra<-0.1
+  rate2<-vmax*css*fra/(css*fra+kmc)*oss/(oss+kmo)
+  ana<-vmax*0.02*css*fra/(css*fra+kmc)*KI/(KI+oss)
+  tot<-rate2+ana
+  return (rate)}
+
+simrun<-function(data, delta){
+t_result<-data.frame(nrow=1000)
+v_result<-data.frame(nrow=1000)
+tn_result<-data.frame(nrow=1000)
+vn_result<-data.frame(nrow=1000)
+
+for (i in 1:length(delta)){
+  new<-solveCSS(data$mvol, data$po, data$bd, delta[i], data$soc, data$oxy, 5e-5, 1e-4,0.58e-7)#vmax=1 d-1
+  fvol<-new*delta[i]^3  ###flux of each colony
+  t_result = cbind(t_result, new)
+  v_result = cbind(v_result, fvol)
+  tn_result = cbind(tn_result, new/max(new))
+  vn_result = cbind(vn_result, fvol/max(fvol))
+  }
+ return (list(t_result, v_result, tn_result, vn_result))
+    }
+ 
+stat_sum<-simrun(data, delta)
+
+##prepare output data 
+data1<-stat_sum[[3]] ##new--uptake flux per volume
+data2<-stat_sum[[4]] ##fvol--uptake flux per colony
+
+features <- c(sprintf("pred%02d", seq(0,55)))
+colnames(data1) <- features
+colnames(data2) <- features
+
+colnames(data1) [1]<- "rs"
+colnames(data2) [1]<- "rs"
+data1$rs<-data$rs  
+data2$rs<-data$rs 
+
+
+##calculate rate by averaged parameters
+delta1<-mean(delta)
+doc1<-mean(soc0)
+#vmax1<-mean(vmax)
+ava1<-solveCSS(data$mvol, data$po, data$bd, delta1, doc1, data$oxy, 5e-5, 1e-4,0.58e-7)#vmax=1 d-1
+#mmax<-max(ava1)
+
+
+pred1<-reshape2::melt(data1, id.vars="rs")
+mm<-max(na.omit(pred1$value))
+pred1$value<-pred1$value/mm###flux per volume
+
+
+totv<-sum(delta^3)
+pred2<-melt(data2, id.vars="rs")
+maxcol<-max(na.omit(pred2$value))##max flux per colony
+pred2$value<-pred2$value###flux of each colony
+
+row_sum<-data.frame(rs=data2[,1], sum=rowSums(data2[,-1]))
+row_sum$flux<-row_sum$sum/totv
+
+
+fave<-data.frame(rs=rs)
+fave$mean<-row_sum$flux/max(row_sum$flux)
+pfave<-melt(fave, id.vars="rs")
+
+fmac<-data.frame(rs=rs)
+fmac$mean<-ava1/max(ava1)
+fit<-nls(mean~a*rs+b*rs^2, data=fmac, start=list(a=2, b=2), trace=TRUE)
+summary(fit)
+
+df<-data.frame(rs=rs)
+df$rate<-2.5269*rs-2.9381*rs^2
+fmac<-melt(df, id.vars="rs")
+
+scaleFUN <- function(x) sprintf("%.1f", x)
+
+predtemp<-pred1[pred1$value !=0, ]
+
+plot1<-ggplot(predtemp, aes(x = rs,y=value, color=variable)) + 
+  scale_x_continuous(name = "Relative saturation",limits = c(0,1)) +
+  scale_y_continuous(name = "Normalized uptake",labels=scaleFUN,limits=c(0,1))+
+  geom_vline(xintercept=0.5, linetype="dashed", size=0.2)+
+  geom_point(aes(group=variable), color="#b35806",linetype="solid", alpha=0.2,size=1, se=F)+
+  geom_smooth(data=pfave, color="#7f3b08", size=1,se=F)
+  #geom_smooth(data=fmac, color="#5e5e5e", size=1,se=F)
+plot1
+
+
+
+plot2<-plot1+theme_linedraw()+theme(panel.background = element_rect(fill = "transparent",colour = NA),
+                                    plot.background = element_rect(fill = "transparent",colour = NA),
+                                     panel.grid = element_blank(),panel.grid.minor = element_blank())+
+  theme(text = element_text(size=12), strip.background = element_blank(),
+  strip.text.x = element_blank())
+print(plot2)
+
+pdf("cul_ctrl.pdf", width=4, height=3)
+plot2
+dev.off()
+
+
+
+
+
+```
+
+
+
+
+```{r label}
+test<-data.frame(rs=rs)
+test$data1<-0.2
+test$data3<-0.8
+ptest<-reshape2::melt(test, id.vars=c("rs"))
+
+plot1<-ggplot(ptest, aes(x = rs,y=value, color=variable)) + 
+  scale_x_continuous(name = "Relative saturation",limits = c(0,1)) +
+  scale_y_continuous(name = "Relative HR",limits = c(0,1))+
+  geom_line(aes(color=variable),size=1.2)+
+  scale_color_manual(values = c("#b35806", "#4d4f53"))
+
+plot2<-plot1+theme_linedraw()+theme(panel.background = element_rect(fill = "transparent",colour = NA),
+                                    plot.background = element_rect(fill = "transparent",colour = NA),
+                                    panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  theme(text = element_text(size=16))
+
+pdf("labels.pdf", width=2.2, height=2.0)
+plot2
+dev.off()
+
+```
+
