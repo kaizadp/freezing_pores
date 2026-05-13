@@ -137,3 +137,55 @@ dunnett_cleaning_wide =
   pivot_wider(names_from = "direction")
   
 
+
+# -------------------------------------------------------------------------
+
+
+
+
+# kolmogorov-smirnoff test
+# 
+
+data1 = pnm_clean2 %>% filter(core_name == "FOR_06" & timepoint == "T0") %>% pull(EqRadius)
+data2 = pnm_clean2 %>% filter(core_name == "FOR_06" & timepoint == "T3") %>% pull(EqRadius)
+ks.test(data1, data2)
+
+
+
+##  PAIRWISE KOLMOGOROV-SMIRNOV
+devtools::install_github("happyrabbit/DataScienceR")
+library(DataScienceR)
+
+dat = 
+pnm_clean2 %>% 
+  filter(core_name == "FOR_01") 
+
+x = 
+  pnm_clean2
+
+
+do_pairwise_ks_test = function(dat){
+  
+  pairwise_ks_test(value = dat$EqRadius,
+                    group = dat$timepoint) %>% 
+    as.data.frame() %>% 
+    rownames_to_column("time1")
+  
+  
+}
+
+x = 
+  pnm_clean2 %>% 
+  group_by(water_treatment, core_name) %>% 
+  do(do_pairwise_ks_test(.)) %>% 
+  pivot_longer(cols = -c(water_treatment, core_name, time1), values_to = "p", names_to = "time2") %>% 
+  mutate(p = round(p, 2)) %>% 
+  filter(time1 != time2) %>% 
+  mutate(asterisk = case_when(p <= 0.05 ~ "*"))
+
+
+
+
+pairwise_ks_test(value, group, n_min = 50, warning = 0,
+                 alternative = "two.sided")
+
