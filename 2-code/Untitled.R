@@ -183,6 +183,81 @@ x =
   filter(time1 != time2) %>% 
   mutate(asterisk = case_when(p <= 0.05 ~ "*"))
 
+x_wide = 
+  x %>% 
+  dplyr::select(-p) %>% 
+  pivot_wider(names_from = "time2", values_from = "asterisk")
+
+
+
+## trying compact letter display (like HSD) for pairwise -- DIDN'T WORK
+multcomp:::insert_absorb(x_wide, 
+                         decreasing=FALSE, 
+                         comps=x_wide, 
+                         lvl_order=lvl_order)
+
+
+library(rcompanion)
+library(multcompView)
+
+data <- data.frame(group = rep(letters[18:26], each = 10),
+                   var = rnorm(180, mean = 2, sd = 5))
+
+PT <- pairwise.t.test(x=data$var, g=data$group, p.adjust.method = "none")#just to make sure i get some sigs for the example
+PT = PT$p.value
+PT1 = fullPTable(PT)
+multcompLetters(PT1,
+                compare="<",
+                threshold=0.05,
+                Letters=letters,
+                reversed = FALSE)
+
+
+
+x_wide2 = 
+  x %>% 
+  dplyr::select(-asterisk) %>% 
+  pivot_wider(names_from = "time2", values_from = "p") %>% 
+  filter(core_name == "FOR_01") %>% 
+  column_to_rownames("time1") %>% 
+  dplyr::select(-water_treatment, -core_name) 
+
+x_wide2[is.na(x_wide2)] <- 1
+x_wide2 = 
+  x_wide2 %>% 
+  as.matrix()
+
+multcompLetters(x_wide2,
+                compare=">",
+                threshold=0.05,
+                Letters=letters,
+                reversed = FALSE)
+
+## TRYING TO PLOT THE SIGNIFICANT PAIRS
+x2 = 
+  x %>% 
+  mutate(number1 = recode(time1, T0 = 100, T1 = 10, T2 = 20, T3 = 30, F1 = 1, F2 = 2, F3 = 3),
+         number2 = recode(time2, T0 = 100, T1 = 10, T2 = 20, T3 = 30, F1 = 1, F2 = 2, F3 = 3),
+         number = number1 + number2) %>% 
+  distinct(number, .keep_all = T) %>% 
+  mutate(time1 = factor(time1, levels = c("T0", "F1", "T1", "F2", "T2", "F3", "T3")),
+         time2 = factor(time2, levels = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))) 
+
+
+x2 %>% 
+  filter(!is.na(p)) %>% 
+  ggplot(aes(x = time2, y = time1, fill = asterisk))+
+  geom_tile(color = "black", size = 0.5, show.legend = F)+
+  geom_text(aes(label = asterisk), color = "black", size = 7)+
+  facet_wrap(~core_name)+
+  scale_fill_manual(values = "darkorange", na.value = "grey50")+
+  labs(x = "", y = "", 
+       title = "Pairwise Kolmogorov-Smirnov Tests for Equivalent Radius
+       
+       ")+
+  theme(plot.title = element_text(size = 18, face = "bold", hjust = 0.5))
+
+#
 
 
 
