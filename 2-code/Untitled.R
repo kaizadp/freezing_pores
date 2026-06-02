@@ -217,8 +217,10 @@ multcompLetters(PT1,
 x_wide2 = 
   x %>% 
   dplyr::select(-asterisk) %>% 
+  mutate(p = case_when(p <= 0.05 ~ 0.01,
+                       p > 0.05 ~ p)) %>% 
   pivot_wider(names_from = "time2", values_from = "p") %>% 
-  filter(core_name == "FOR_01") %>% 
+  filter(core_name == "FOR_04") %>% 
   column_to_rownames("time1") %>% 
   dplyr::select(-water_treatment, -core_name) 
 
@@ -227,11 +229,51 @@ x_wide2 =
   x_wide2 %>% 
   as.matrix()
 
-multcompLetters(x_wide2,
+multcompLetters(data = x_wide2,
                 compare=">",
                 threshold=0.05,
                 Letters=letters,
                 reversed = FALSE)
+
+###############
+###############
+
+## PAIRWISE KOLMOGOROV-SMIRNOV
+
+assign_letters = function(df){
+  
+  letters = multcompLetters(setNames(as.numeric(df$p), df$comparison),
+                            compare="<",
+                            threshold=0.05,
+                            #Letters=letters,
+                            reversed = FALSE)
+  
+  letters$Letters %>% as.data.frame() %>% rownames_to_column("x")
+  
+}
+
+df =  x %>% 
+  filter(!is.na(p)) %>% 
+  mutate(comparison = paste0(time1, "-", time2)) %>% 
+  dplyr::select(core_name, comparison, p) %>% 
+  #  pivot_wider(names_from = "comparison", values_from = "p") %>% 
+  ungroup() %>% 
+  
+  #  filter(water_treatment == "low water") %>%
+  # filter(core_name == "FOR_01") %>% 
+  group_by(core_name) %>% 
+  do(assign_letters(.))
+
+
+
+
+
+
+
+
+
+
+
 
 ## TRYING TO PLOT THE SIGNIFICANT PAIRS
 x2 = 
@@ -264,3 +306,22 @@ x2 %>%
 pairwise_ks_test(value, group, n_min = 50, warning = 0,
                  alternative = "two.sided")
 
+
+
+
+pnm_clean2 %>% 
+  group_by(water_treatment, core_name, timepoint) %>% 
+  dplyr::summarise(mean = round(mean(EqRadius, na.rm = T), 3),
+                   median = round(median(EqRadius, na.rm = T), 3),
+                   max = round(max(EqRadius, na.rm = T), 3),
+                   min = round(min(EqRadius, na.rm = T), 3)) %>% 
+  knitr::kable()
+
+
+pnm_clean2 %>% 
+  group_by(water_treatment, core_name, timepoint) %>% 
+  dplyr::summarise(mean = round(mean(Volume, na.rm = T), 3),
+                   median = round(median(Volume, na.rm = T), 3),
+                   max = round(max(Volume, na.rm = T), 3),
+                   min = round(min(Volume, na.rm = T), 3)) %>% 
+  knitr::kable()
