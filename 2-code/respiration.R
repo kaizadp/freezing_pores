@@ -156,7 +156,7 @@ compute_rates <- function(licor_processed_ppm, volume_cm3 = 81.07, tair_C = 21, 
               #m <- lm(gas_ppm ~ time)
               #gas_ppm_time <- unname(coefficients(m)["time"])
 }
-cumulative_evolution = function(licor_processed_rates){
+cumulative_evolution = function(licor_processed_rates, weights_processed){
   
   fn = function(licor_processed_rates){
     co2_interp = 
@@ -170,16 +170,18 @@ cumulative_evolution = function(licor_processed_rates){
       force()
   }
   
+  core_weights = weights_processed %>% dplyr::select(core_name, soil_od_g)
   
   cumulative = 
     licor_processed_rates %>% 
     filter(elapsed_hr < 20) %>% 
     filter(elapsed_hr > 0) %>% 
     group_by(water_treatment, core_name, timepoint) %>% 
-    do(fn(.))
+    do(fn(.)) %>% 
+    left_join(core_weights) %>% 
+    mutate(co2_umol_cum_g = co2_umol_cum/soil_od_g)
   
 }
-
 
 
 

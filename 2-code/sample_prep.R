@@ -33,3 +33,6 @@ soil_water_g = soil_fm_g - soil_od_g
 target_water_g = soil_od_g * 60/100
 add_water_g = target_water_g - soil_water_g
 TARGET_WEIGHT_G = soil_fm_g + add_water_g
+
+
+# core weights calculation ----
