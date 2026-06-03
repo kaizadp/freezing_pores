@@ -68,7 +68,7 @@ pnm_clean2 =
 
 #### Equivalent radius - distributions
 
-```{r pnm_radius_ridges}
+```{r pnm_radius_ridges, fig.height=10, fig.width=18}
 
 # sysfonts::font_add_google("Playfair Display", "Playfair")
 # sysfonts::font_add_google("Roboto", "Roboto")
@@ -108,7 +108,8 @@ xct_pnm_processed %>%
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank(),
         strip.text.y = element_blank(),
-        strip.text.x = element_text(size = 20)
+        strip.text.x = element_text(size = 20),
+        plot.background = element_rect(color = "black", fill = NA, linewidth = 2)
   )
 
 
@@ -144,15 +145,16 @@ xct_pnm_processed %>%
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank(),
         strip.text.y = element_blank(),
-        strip.text.x = element_text(size = 20)
-  )
+        strip.text.x = element_text(size = 20),
+        plot.background = element_rect(color = "black", fill = NA, linewidth = 2))
+
 
 ```
 
 
 #### Coordination number
 
-```{r pnm_coordination_raincloud}
+```{r pnm_coordination_raincloud, fig.height=10, fig.width=8}
 
 xct_pnm_processed %>% 
   filter(core_name %in% c("FOR_01", "FOR_04")) %>% 
@@ -248,9 +250,6 @@ throats2 =
 
 ```{r pnm_coordination_map_throats_old, eval=FALSE}
 
-
-
-
 print("FOR_O4: high water")
 
 throats2 %>% 
@@ -324,7 +323,7 @@ throats2 %>%
 
 ```
 
-```{r pnm_coordination_map_throats}
+```{r pnm_coordination_map_throats, fig.width=16, fig.height=8}
 
 throats2 %>% 
   filter(core_name == c("FOR_01", "FOR_04")) %>% 
@@ -380,8 +379,6 @@ xct_summary2 %>%
        x = "")+
   theme(legend.position = "none")
 
-
-
 ```
 
 ```{r pores_volume_connected, fig.height= 9.5, fig.width=8}
@@ -405,7 +402,6 @@ gg_pore_conn =
        x = "")+
   theme(legend.position = "none")
 
-
 gg_pore_vol = 
   xct_summary2 %>% 
   filter(!is.na(timepoint)) %>% 
@@ -426,18 +422,34 @@ cowplot::plot_grid(gg_pore_vol, gg_pore_conn, ncol = 1, labels = c("A", "B"))
 
 ## XCT summary tables 
 
-#### Equivalent radius 
+#### Equivalent radius (mm)
 
 ```{r}
+print("LOW WATER CORES")
+xct_radius_summary %>% 
+  filter(water_treatment == "low water") %>% 
+  ungroup() %>% 
+  dplyr::select(-water_treatment) %>% 
+  knitr::kable()
 
-xct_radius_summary %>% knitr::kable()
+print("HIGH WATER CORES")
+xct_radius_summary %>% 
+  filter(water_treatment == "high water") %>% 
+  ungroup() %>% 
+  dplyr::select(-water_treatment) %>% 
+  knitr::kable()
+
 
 ```
 
+--- 
 
 # RESPIRATION
 
-```{r licor_ppm}
+<details>
+  <summary> Click for timeseries figures </summary>
+
+```{r respiration_ppm}
 
 licor_processed_rates %>% 
   mutate(timepoint = factor(timepoint, levels = c("t0", "ftc1", "ftc2", "ftc3"))) %>% 
@@ -452,7 +464,7 @@ licor_processed_rates %>%
 
 ```
 
-```{r licor_ppm_smooth}
+```{r respiration_ppm_smooth}
 
 licor_processed_rates %>% 
   mutate(timepoint = factor(timepoint, levels = c("t0", "ftc1", "ftc2", "ftc3"))) %>% 
@@ -468,7 +480,10 @@ licor_processed_rates %>%
 
 ```
 
-```{r licor_cumulative, fig.height=6, fig.width=6.5}
+</details>
+
+
+```{r respiration_cumulative, fig.height=6, fig.width=6.5}
 licor_cumulative = licor_cumulative %>% 
   mutate(timepoint = toupper(timepoint),
          timepoint = factor(timepoint, levels = c("T0", "FTC1", "FTC2", "FTC3")),
@@ -476,7 +491,7 @@ licor_cumulative = licor_cumulative %>%
 
 ```
 
-```{r}
+```{r respiration_anova}
 fit_anova <- function(dat) {
   
   l = lm(co2_umol_cum_g ~ water_treatment, data = dat)
@@ -497,8 +512,7 @@ licor_anova =
 
 ```
 
-```{r}
-
+```{r respiration_cumulative_gg, fig.height=6, fig.width=6}
 
 licor_cumulative %>% 
   filter(core_name %in% c("FOR_07", "FOR_08", "FOR_09", "FOR_11", "FOR_12")) %>% 
@@ -522,10 +536,11 @@ licor_cumulative %>%
 
 ```
 
+---
 
-# WEOM
+# BIOGEOCHEMISTRY
 
-```{r}
+```{r weom, eval=FALSE}
 
 weoc_processed = 
   weoc_processed %>% 
@@ -548,7 +563,7 @@ weoc_processed =
 ```
 
 
-```{r}
+```{r mbc, eval=FALSE}
 
   mbc_processed %>% 
     filter(tube_type == "destructive cores") %>% 
@@ -569,7 +584,7 @@ weoc_processed =
 ```
 
 
-```{r}
+```{r biogeochemistry_summary}
 
 chemistry_summary = 
   combined_chemistry %>% 

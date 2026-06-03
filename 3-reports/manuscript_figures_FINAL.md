@@ -23,65 +23,79 @@ Untitled
 
 ## XCT summary tables
 
-#### Equivalent radius
+#### Equivalent radius (mm)
 
-| water_treatment | core_name | timepoint |  mean | median |   max |   min | .   |
-|:----------------|:----------|:----------|------:|-------:|------:|------:|:----|
-| low water       | FOR_01    | T0        | 0.695 |  0.603 | 2.902 | 0.198 | ab  |
-| low water       | FOR_01    | F1        | 0.717 |  0.623 | 3.335 | 0.166 | c   |
-| low water       | FOR_01    | T1        | 0.687 |  0.588 | 3.269 | 0.189 | a   |
-| low water       | FOR_01    | F2        | 0.704 |  0.609 | 3.295 | 0.186 | bc  |
-| low water       | FOR_01    | T2        | 0.683 |  0.588 | 3.558 | 0.176 | a   |
-| low water       | FOR_01    | F3        | 0.693 |  0.602 | 3.490 | 0.183 | ab  |
-| low water       | FOR_01    | T3        | 0.684 |  0.594 | 3.333 | 0.164 | a   |
-| low water       | FOR_02    | T0        | 0.609 |  0.526 | 2.428 | 0.201 | ab  |
-| low water       | FOR_02    | F1        | 0.624 |  0.550 | 2.138 | 0.135 | ac  |
-| low water       | FOR_02    | T1        | 0.594 |  0.522 | 3.112 | 0.168 | b   |
-| low water       | FOR_02    | F2        | 0.631 |  0.559 | 2.911 | 0.182 | c   |
-| low water       | FOR_02    | T2        | 0.590 |  0.513 | 3.011 | 0.172 | b   |
-| low water       | FOR_02    | F3        | 0.596 |  0.521 | 3.291 | 0.180 | b   |
-| low water       | FOR_02    | T3        | 0.586 |  0.512 | 2.979 | 0.159 | b   |
-| low water       | FOR_03    | T0        | 0.682 |  0.635 | 2.633 | 0.212 | a   |
-| low water       | FOR_03    | F1        | 0.718 |  0.626 | 3.016 | 0.130 | bc  |
-| low water       | FOR_03    | T1        | 0.754 |  0.658 | 2.839 | 0.204 | d   |
-| low water       | FOR_03    | F2        | 0.712 |  0.637 | 2.281 | 0.206 | abc |
-| low water       | FOR_03    | T2        | 0.732 |  0.639 | 2.787 | 0.207 | bd  |
-| low water       | FOR_03    | F3        | 0.701 |  0.616 | 3.123 | 0.187 | ac  |
-| low water       | FOR_03    | T3        | 0.729 |  0.650 | 2.954 | 0.187 | bd  |
-| high water      | FOR_04    | T0        | 0.564 |  0.483 | 2.809 | 0.142 | a   |
-| high water      | FOR_04    | F1        | 0.581 |  0.501 | 2.898 | 0.175 | b   |
-| high water      | FOR_04    | T1        | 0.540 |  0.451 | 2.515 | 0.172 | c   |
-| high water      | FOR_04    | F2        | 0.570 |  0.498 | 2.756 | 0.165 | b   |
-| high water      | FOR_04    | T2        | 0.549 |  0.446 | 2.551 | 0.155 | d   |
-| high water      | FOR_04    | F3        | 0.620 |  0.551 | 2.938 | 0.191 | e   |
-| high water      | FOR_04    | T3        | 0.547 |  0.450 | 2.716 | 0.161 | cd  |
-| high water      | FOR_05    | T0        | 0.675 |  0.585 | 4.695 | 0.187 | a   |
-| high water      | FOR_05    | F1        | 0.644 |  0.569 | 4.021 | 0.130 | b   |
-| high water      | FOR_05    | T1        | 0.587 |  0.504 | 4.295 | 0.157 | cd  |
-| high water      | FOR_05    | F2        | 0.721 |  0.661 | 4.333 | 0.180 | e   |
-| high water      | FOR_05    | T2        | 0.578 |  0.500 | 4.110 | 0.198 | c   |
-| high water      | FOR_05    | F3        | 0.745 |  0.686 | 4.816 | 0.164 | f   |
-| high water      | FOR_05    | T3        | 0.576 |  0.485 | 4.369 | 0.168 | d   |
-| high water      | FOR_06    | T0        | 0.548 |  0.476 | 2.574 | 0.189 | a   |
-| high water      | FOR_06    | F1        | 0.574 |  0.496 | 2.446 | 0.184 | b   |
-| high water      | FOR_06    | T1        | 0.520 |  0.453 | 2.691 | 0.190 | c   |
-| high water      | FOR_06    | F2        | 0.817 |  0.761 | 2.957 | 0.208 | d   |
-| high water      | FOR_06    | T2        | 0.538 |  0.467 | 2.261 | 0.187 | a   |
-| high water      | FOR_06    | T3        | 0.616 |  0.522 | 2.246 | 0.199 | e   |
+    ## [1] "LOW WATER CORES"
+
+| core_name | timepoint |  mean | median |   max |   min | .   |
+|:----------|:----------|------:|-------:|------:|------:|:----|
+| FOR_01    | T0        | 0.695 |  0.603 | 2.902 | 0.198 | ab  |
+| FOR_01    | F1        | 0.717 |  0.623 | 3.335 | 0.166 | c   |
+| FOR_01    | T1        | 0.687 |  0.588 | 3.269 | 0.189 | a   |
+| FOR_01    | F2        | 0.704 |  0.609 | 3.295 | 0.186 | bc  |
+| FOR_01    | T2        | 0.683 |  0.588 | 3.558 | 0.176 | a   |
+| FOR_01    | F3        | 0.693 |  0.602 | 3.490 | 0.183 | ab  |
+| FOR_01    | T3        | 0.684 |  0.594 | 3.333 | 0.164 | a   |
+| FOR_02    | T0        | 0.609 |  0.526 | 2.428 | 0.201 | ab  |
+| FOR_02    | F1        | 0.624 |  0.550 | 2.138 | 0.135 | ac  |
+| FOR_02    | T1        | 0.594 |  0.522 | 3.112 | 0.168 | b   |
+| FOR_02    | F2        | 0.631 |  0.559 | 2.911 | 0.182 | c   |
+| FOR_02    | T2        | 0.590 |  0.513 | 3.011 | 0.172 | b   |
+| FOR_02    | F3        | 0.596 |  0.521 | 3.291 | 0.180 | b   |
+| FOR_02    | T3        | 0.586 |  0.512 | 2.979 | 0.159 | b   |
+| FOR_03    | T0        | 0.682 |  0.635 | 2.633 | 0.212 | a   |
+| FOR_03    | F1        | 0.718 |  0.626 | 3.016 | 0.130 | bc  |
+| FOR_03    | T1        | 0.754 |  0.658 | 2.839 | 0.204 | d   |
+| FOR_03    | F2        | 0.712 |  0.637 | 2.281 | 0.206 | abc |
+| FOR_03    | T2        | 0.732 |  0.639 | 2.787 | 0.207 | bd  |
+| FOR_03    | F3        | 0.701 |  0.616 | 3.123 | 0.187 | ac  |
+| FOR_03    | T3        | 0.729 |  0.650 | 2.954 | 0.187 | bd  |
+
+    ## [1] "HIGH WATER CORES"
+
+| core_name | timepoint |  mean | median |   max |   min | .   |
+|:----------|:----------|------:|-------:|------:|------:|:----|
+| FOR_04    | T0        | 0.564 |  0.483 | 2.809 | 0.142 | a   |
+| FOR_04    | F1        | 0.581 |  0.501 | 2.898 | 0.175 | b   |
+| FOR_04    | T1        | 0.540 |  0.451 | 2.515 | 0.172 | c   |
+| FOR_04    | F2        | 0.570 |  0.498 | 2.756 | 0.165 | b   |
+| FOR_04    | T2        | 0.549 |  0.446 | 2.551 | 0.155 | d   |
+| FOR_04    | F3        | 0.620 |  0.551 | 2.938 | 0.191 | e   |
+| FOR_04    | T3        | 0.547 |  0.450 | 2.716 | 0.161 | cd  |
+| FOR_05    | T0        | 0.675 |  0.585 | 4.695 | 0.187 | a   |
+| FOR_05    | F1        | 0.644 |  0.569 | 4.021 | 0.130 | b   |
+| FOR_05    | T1        | 0.587 |  0.504 | 4.295 | 0.157 | cd  |
+| FOR_05    | F2        | 0.721 |  0.661 | 4.333 | 0.180 | e   |
+| FOR_05    | T2        | 0.578 |  0.500 | 4.110 | 0.198 | c   |
+| FOR_05    | F3        | 0.745 |  0.686 | 4.816 | 0.164 | f   |
+| FOR_05    | T3        | 0.576 |  0.485 | 4.369 | 0.168 | d   |
+| FOR_06    | T0        | 0.548 |  0.476 | 2.574 | 0.189 | a   |
+| FOR_06    | F1        | 0.574 |  0.496 | 2.446 | 0.184 | b   |
+| FOR_06    | T1        | 0.520 |  0.453 | 2.691 | 0.190 | c   |
+| FOR_06    | F2        | 0.817 |  0.761 | 2.957 | 0.208 | d   |
+| FOR_06    | T2        | 0.538 |  0.467 | 2.261 | 0.187 | a   |
+| FOR_06    | T3        | 0.616 |  0.522 | 2.246 | 0.199 | e   |
+
+------------------------------------------------------------------------
 
 # RESPIRATION
 
-![](manuscript_figures_FINAL_files/figure-gfm/licor_ppm-1.png)<!-- -->
+<details>
+<summary>
+Click for timeseries figures
+</summary>
 
-![](manuscript_figures_FINAL_files/figure-gfm/licor_ppm_smooth-1.png)<!-- -->
+![](manuscript_figures_FINAL_files/figure-gfm/respiration_ppm-1.png)<!-- -->
 
-![](manuscript_figures_FINAL_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](manuscript_figures_FINAL_files/figure-gfm/respiration_ppm_smooth-1.png)<!-- -->
 
-# WEOM
+</details>
 
-![](manuscript_figures_FINAL_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](manuscript_figures_FINAL_files/figure-gfm/respiration_cumulative_gg-1.png)<!-- -->
 
-![](manuscript_figures_FINAL_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->![](manuscript_figures_FINAL_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->![](manuscript_figures_FINAL_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
+------------------------------------------------------------------------
+
+# BIOGEOCHEMISTRY
 
 | water_treatment | ftc | MBC_ugg | MBN_ugg | TDN_ugg | TotalC_percent | TotalN_percent | WEOC_ugg |
 |:---|:---|:---|:---|:---|:---|:---|:---|
