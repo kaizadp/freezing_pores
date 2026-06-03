@@ -308,7 +308,7 @@ pnm = function(){
 compute_pnm_radius_summary = function(xct_pnm_processed){
   
   pnm_radius_summary = 
-    pnm_clean2 %>% 
+    xct_pnm_processed %>% 
     group_by(water_treatment, core_name, timepoint) %>% 
     dplyr::summarise(mean = round(mean(EqRadius, na.rm = T), 3),
                      median = round(median(EqRadius, na.rm = T), 3),
@@ -330,7 +330,7 @@ compute_pnm_radius_summary = function(xct_pnm_processed){
   }
   
   pairwise_ks = 
-    pnm_clean2 %>% 
+    xct_pnm_processed %>% 
     group_by(water_treatment, core_name) %>% 
     do(do_pairwise_ks_test(.)) %>% 
     pivot_longer(cols = -c(water_treatment, core_name, time1), values_to = "p", names_to = "time2") %>% 
