@@ -509,7 +509,7 @@ licor_anova =
   group_by(timepoint) %>% 
   do(fit_anova(.))
 
-
+licor_anova %>% knitr::kable()
 ```
 
 ```{r respiration_cumulative_gg, fig.height=6, fig.width=6}
@@ -599,9 +599,14 @@ chemistry_summary =
   mutate_if(is.numeric, round, 2) %>% 
   mutate(summary = paste(mean, "\u00b1", se)) %>% 
   dplyr::select(-c(mean, sd, se)) %>% 
-  pivot_wider(values_from = "summary") 
+  pivot_wider(values_from = "summary") %>% 
+  mutate(ftc = str_replace(ftc, "ftc", "T"),
+         ftc = toupper(ftc)) %>% 
+  arrange(desc(water_treatment), ftc)
 
 chemistry_summary %>% 
+  dplyr::select(water_treatment, ftc, 
+                WEOC_ugg, TDN_ugg, MBC_ugg, MBN_ugg, TotalC_percent, TotalN_percent) %>% 
   knitr::kable()
 
 
