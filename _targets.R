@@ -17,12 +17,14 @@ tar_option_set(
 # Run the R scripts in the R/ folder with your custom functions:
 source("2-code/respiration.R")
 source("2-code/weom.R")
+source("2-code/tctn.R")
 source("2-code/xct.R")
 
 # Replace the target list below with your own:
 list(
   # import metadata
   tar_target(corekey, read_sheet("https://docs.google.com/spreadsheets/d/1qpfho6Z7aHYg9zkT0dMtQy7Oth5MkVtFc7O7rB45_t4")),
+  tar_target(weights_processed, read_sheet("https://docs.google.com/spreadsheets/d/19J4ZAUzMCDVZrQFXoziNXR8oMVrwYcr2wksLX09UGzo/", sheet = "calculation2")),
   
   # respiration
   tar_target(licor_map, read_sheet("https://docs.google.com/spreadsheets/d/1CkMjaIOUSHGJJloa4W4ILtFO3CVoeRCgK3Cf1GTom5o/", 
@@ -30,7 +32,7 @@ list(
   tar_target(licor_data, import_licor_data(FILEPATH = "1-data/respiration_subset")),
   tar_target(licor_processed_ppm, process_licor_data(licor_data, licor_map, corekey)),
   tar_target(licor_processed_rates, compute_rates(licor_processed_ppm)),
-  tar_target(licor_cumulative, cumulative_evolution(licor_processed_rates)),
+  tar_target(licor_cumulative, cumulative_evolution(licor_processed_rates, weights_processed)),
 
   
   # weom-mbc
@@ -54,6 +56,9 @@ list(
   tar_target(xct_pnm, import_xct_pnm(FILEPATH = "1-data/xct/csv-pnm", PATTERN = ".csv")),
   tar_target(xct_pnm_processed, process_xct_pnm(xct_pnm, corekey)),
   
+  ## xct radius summary table
+  tar_target(xct_radius_summary, compute_pnm_radius_summary(xct_pnm_processed)),
+  
   # combined chemistry data
   tar_target(combined_chemistry, combine_chemistry_data(weoc_processed, mbc_processed, tctn_processed)),
   
@@ -65,7 +70,8 @@ list(
     
   }, format = "file"),
   
-  tar_render(report, path = "3-reports/egu25.Rmd")
+#  tar_render(report, path = "3-reports/egu25.Rmd"),
+  tar_render(report, path = "3-reports/manuscript_figures_FINAL.Rmd")
   
   
 )
