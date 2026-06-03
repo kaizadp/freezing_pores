@@ -31,7 +31,7 @@ theme_kp <- function() {  # this for all the elements common across plots
           
           plot.title = element_text(hjust = 0, size = 14),
           axis.text = element_text(size = 14, color = "black"),
-          axis.title = element_text(size = 14, face = "bold", color = "black"),
+          axis.title = element_text(size = 16, face = "bold", color = "black"),
           
           # formatting for facets
           panel.background = element_blank(),
@@ -39,8 +39,8 @@ theme_kp <- function() {  # this for all the elements common across plots
           panel.grid = element_blank(),
           panel.spacing.x = unit(1, "lines"), #facet spacing for x axis
           panel.spacing.y = unit(1.5, "lines"), #facet spacing for x axis
-          strip.text.x = element_text(size=14, face="bold"), #facet labels
-          strip.text.y = element_text(size=14, face="bold", angle = 270) #facet labels
+          strip.text.x = element_text(size=16, face="bold"), #facet labels
+          strip.text.y = element_text(size=16, face="bold", angle = 270) #facet labels
     )
 }
 theme_set(theme_kp())
@@ -111,7 +111,119 @@ pnm_clean2 %>%
   theme(panel.grid = element_blank())+
   guides(color = guide_legend(override.aes = list(linewidth = 3), nrow = 1))
 
+
+
+
+
+pnm_clean2 %>% 
+ # filter(core_name %in% c("FOR_01", "FOR_05")) %>% 
+  #   filter(grepl("T", timepoint)) %>% 
+  ggplot(aes(x = EqRadius, color = timepoint, group = timepoint, fill = timepoint)) +
+  stat_density(geom = "line", position = "identity")+
+  geom_density(linewidth = 1, show.legend = F, alpha = 0.5)+
+  geom_density(data = pnm_clean2 %>%  filter(timepoint == "T0"), fill = NA, color = "black", linewidth = 2)+
+
+  #  facet_wrap(~water_treatment + core_name)+
+  facet_nested_wrap(~ water_treatment + core_name,
+                    nest_line = element_line(colour = "grey"))+ 
+  xlim(0, 2.5)+
+  scale_color_manual(values = c("black", "lightblue", "#dd4124", "blue", "darkred", "darkblue", "orange"),
+                     breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
+  scale_fill_manual(values = c("black", "lightblue", "#dd4124", "blue", "darkred", "darkblue", "orange"),
+                     breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
+  labs(x = "equivalent radius (mm)",
+       y = "")+
+  theme(panel.grid = element_blank())+
+  guides(color = guide_legend(override.aes = list(linewidth = 3), nrow = 1))
+
 ```
+
+```{r pnm_radius_ridges}
+
+library(ggridges)
+# library(ggalt)
+library(gtrendsR)
+
+# sysfonts::font_add_google("Playfair Display", "Playfair")
+# sysfonts::font_add_google("Roboto", "Roboto")
+# sysfonts::font_add_google("Andika", "Andika")
+# showtext_auto()
+# 
+
+pnm_clean2 %>% 
+  filter(water_treatment == "high water") %>% 
+  ggplot(aes(x = EqRadius))+
+  geom_density(aes(group = timepoint, fill = timepoint), color = "black", 
+               alpha = 0.9, linewidth = 1)+
+  scale_fill_manual(values = rev(PNWColors::pnw_palette("Sunset2", 33)))+
+    scale_color_manual(values = c("grey60", "lightblue", "#dd4124", "lightblue", "#dd4124", "lightblue", "#dd4124"),
+                     breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
+  scale_fill_manual(values = c("grey60", "lightblue", "pink", "lightblue", "pink", "lightblue", "pink"),
+                     breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
+  geom_label(data = pnm_clean2 %>% distinct(core_name, timepoint, water_treatment) %>% filter(water_treatment == "high water"),
+            aes(label = paste("   ", timepoint, "   "), x = 2, y = 0.5, fill = timepoint),
+            border.colour = NA, alpha = 0.8,
+            face = "bold", size = 8,
+            label.padding = unit(0.3, "lines"))+
+  facet_grid(timepoint ~ core_name)+
+  labs(x = "
+       Equivalent Radius (mm)",
+       title = "High Water Treatment
+       ",
+       y = "")+
+  theme(legend.position = "none",
+        panel.spacing.y = unit(-8, "lines"),
+        axis.text.x = element_text(size = 16),
+        plot.title = element_text(hjust = 0.5, size = 20, face = "bold"),
+        panel.grid = element_blank(),
+        strip.background = element_blank(),
+        panel.border = element_blank(),
+        axis.line.x = element_line(size = 1),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        strip.text.y = element_blank(),
+        strip.text.x = element_text(size = 20)
+  )
+
+
+pnm_clean2 %>% 
+  filter(water_treatment == "low water") %>% 
+  ggplot(aes(x = EqRadius))+
+  geom_density(aes(group = timepoint, fill = timepoint), color = "black", 
+               alpha = 0.9, linewidth = 1)+
+  scale_fill_manual(values = rev(PNWColors::pnw_palette("Sunset2", 33)))+
+    scale_color_manual(values = c("grey40", "lightblue", "#dd4124", "lightblue", "#dd4124", "lightblue", "#dd4124"),
+                     breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
+  scale_fill_manual(values = c("grey40", "lightblue", "pink", "lightblue", "pink", "lightblue", "pink"),
+                     breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
+  geom_label(data = pnm_clean2 %>% distinct(core_name, timepoint, water_treatment) %>% filter(water_treatment == "low water"),
+            aes(label = paste("   ", timepoint, "   "), x = 2, y = 0.5, fill = timepoint),
+            border.colour = NA, alpha = 0.8,
+            face = "bold", size = 8,
+            label.padding = unit(0.3, "lines"))+
+  facet_grid(timepoint ~ core_name)+
+  labs(x = "
+       Equivalent Radius (mm)",
+       title = "Low Water Treatment
+       ",
+       y = "")+
+  theme(legend.position = "none",
+        panel.spacing.y = unit(-8, "lines"),
+        axis.text.x = element_text(size = 16),
+        plot.title = element_text(hjust = 0.5, size = 20, face = "bold"),
+        panel.grid = element_blank(),
+        strip.background = element_blank(),
+        panel.border = element_blank(),
+        axis.line.x = element_line(size = 1),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        strip.text.y = element_blank(),
+        strip.text.x = element_text(size = 20)
+  )
+
+```
+
+
 
 
 ```{r}
@@ -142,14 +254,23 @@ pnm_clean2 %>%
   filter(core_name %in% c("FOR_01", "FOR_04")) %>% 
 #  filter(grepl("T", timepoint)) %>% 
   ggplot(aes(x = timepoint, y = Coordination.Number, color = timepoint, group = timepoint, fill = timepoint)) +
-  ggdist::stat_halfeye(#aes(fill = Incubation), 
-    size = 1, alpha = 0.5,
-    position = position_nudge(x = 0.2), width = 0.5)+
+#  geom_violin(fill = "black")+
+  see::geom_violinhalf(width = 0.5, position = position_nudge(x = 0.3)#, color = "black"
+                       )+
+
+#  ggdist::stat_halfeye(#aes(fill = Incubation), 
+#    size = 1, alpha = 1,
+#    position = position_nudge(x = 0.2), width = 0.5)+
   geom_jitter(width = 0.15, size = 0.8)+
-  scale_color_manual(values = c("black", "lightblue", "#dd4124", "blue", "darkred", "darkblue", "orange"),
+#  scale_color_manual(values = c("black", "lightblue", "#dd4124", "blue", "darkred", "darkblue", "orange"),
+#                     breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
+#  scale_fill_manual(values = c("black", "lightblue", "#dd4124", "blue", "darkred", "darkblue", "orange"),
+#                    breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
+  scale_color_manual(values = c("grey40", "lightblue", "pink", "lightblue", "pink", "lightblue", "pink"),
                      breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
-  scale_fill_manual(values = c("black", "lightblue", "#dd4124", "blue", "darkred", "darkblue", "orange"),
-                    breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
+  scale_fill_manual(values = c("grey40", "lightblue", "pink", "lightblue", "pink", "lightblue", "pink"),
+                     breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
+  geom_hline(yintercept = 20, linetype = "longdash")+
   labs(x = "", 
        y = "Pore Coordination Number")+
   facet_wrap(~water_treatment, nrow = 2)+
@@ -170,6 +291,7 @@ pnm_clean2 %>%
 
 ```{r pnm_coordination_map}
 # coordinations
+print("FOR_O1: low water")
 
 xct_pnm_processed %>% filter(core_name == "FOR_01" & 
                                Coordination.Number == 0  & 
@@ -188,10 +310,11 @@ xct_pnm_processed %>% filter(core_name == "FOR_01" &
   scale_size(range = c(2, 6))+
   theme(legend.position = "none",
         axis.text = element_blank(),
-        axis.title = element_blank())
+        axis.title = element_blank())+
+  coord_equal()
 
 
-
+print("FOR_O4: low water")
 xct_pnm_processed %>% filter(core_name == "FOR_04" & 
                                Coordination.Number == 0  & 
                                grepl("T", timepoint) &
@@ -209,10 +332,8 @@ xct_pnm_processed %>% filter(core_name == "FOR_04" &
   scale_size(range = c(2, 6))+
   theme(legend.position = "none",
         axis.text = element_blank(),
-        axis.title = element_blank())
-
-  
-
+        axis.title = element_blank())+
+  coord_equal()
 
 ```
 
@@ -244,6 +365,7 @@ throats2 =
   filter(Coordination.Number.x == 0 | Coordination.Number.x > 20 | Coordination.Number.y == 0 | Coordination.Number.y > 20)
 
 
+print("FOR_O4: high water")
 
 throats2 %>% 
   filter(core_name == "FOR_04" & 
@@ -275,9 +397,11 @@ throats2 %>%
   theme(legend.position = "none",
         axis.text = element_blank(),
         axis.title = element_blank(),
-        axis.ticks = element_blank())
+        axis.ticks = element_blank())+
+  coord_equal()
 
 
+print("FOR_O1: low water")
 throats2 %>% 
   filter(core_name == "FOR_01" & 
                                timepoint %in% c("T0", "T3")) %>% 
@@ -308,14 +432,16 @@ throats2 %>%
   theme(legend.position = "none",
         axis.text = element_blank(),
         axis.title = element_blank(),
-        axis.ticks = element_blank())
-  
+        axis.ticks = element_blank())+
+    coord_equal()
+
 
 ```
 
 
 
 ```{r}
+
 throats2 %>% 
   filter(core_name == "FOR_01") %>% 
   ggplot()+
@@ -323,7 +449,20 @@ throats2 %>%
                #color = "#ed8b00", 
                color = "black",
                alpha = 0.2)+
-  facet_grid(core_name ~ timepoint)
+  facet_grid(core_name ~ timepoint)+
+  coord_equal()
+
+
+throats2 %>% 
+  filter(core_name == c("FOR_01", "FOR_04")) %>% 
+  ggplot()+
+  geom_segment(aes(x = x1, y = z1, xend = x2, yend = z2),
+               #color = "#ed8b00", 
+               color = "black",
+               alpha = 0.5)+
+  facet_grid(core_name ~ timepoint)+
+  coord_equal()
+
 ```
 
 

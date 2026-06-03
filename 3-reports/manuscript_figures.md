@@ -7,17 +7,31 @@ Untitled
 
 ![](manuscript_figures_files/figure-gfm/pnm_radius-1.png)<!-- -->![](manuscript_figures_files/figure-gfm/pnm_radius-2.png)<!-- -->
 
-![](manuscript_figures_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](manuscript_figures_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->![](manuscript_figures_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
+
+![](manuscript_figures_files/figure-gfm/pnm_radius_ridges-1.png)<!-- -->![](manuscript_figures_files/figure-gfm/pnm_radius_ridges-2.png)<!-- -->
 
 ![](manuscript_figures_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 ![](manuscript_figures_files/figure-gfm/pnm_coordination_raincloud-1.png)<!-- -->
 
-![](manuscript_figures_files/figure-gfm/pnm_coordination_map-1.png)<!-- -->![](manuscript_figures_files/figure-gfm/pnm_coordination_map-2.png)<!-- -->
+    ## [1] "FOR_O1: low water"
 
-![](manuscript_figures_files/figure-gfm/pnm_coordination_map_throats-1.png)<!-- -->![](manuscript_figures_files/figure-gfm/pnm_coordination_map_throats-2.png)<!-- -->
+![](manuscript_figures_files/figure-gfm/pnm_coordination_map-1.png)<!-- -->
 
-![](manuscript_figures_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+    ## [1] "FOR_O4: low water"
+
+![](manuscript_figures_files/figure-gfm/pnm_coordination_map-2.png)<!-- -->
+
+    ## [1] "FOR_O4: high water"
+
+![](manuscript_figures_files/figure-gfm/pnm_coordination_map_throats-1.png)<!-- -->
+
+    ## [1] "FOR_O1: low water"
+
+![](manuscript_figures_files/figure-gfm/pnm_coordination_map_throats-2.png)<!-- -->
+
+![](manuscript_figures_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->![](manuscript_figures_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
 
 ## Summaries
 
@@ -59,11 +73,11 @@ Untitled
 Session Info
 </summary>
 
-Date run: 2025-12-30
+Date run: 2026-06-02
 
     ## R version 4.5.0 (2025-04-11)
     ## Platform: aarch64-apple-darwin20
-    ## Running under: macOS Sequoia 15.7.3
+    ## Running under: macOS 26.5
     ## 
     ## Matrix products: default
     ## BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib 
@@ -79,33 +93,29 @@ Date run: 2025-12-30
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] ggh4x_0.3.1         googlesheets4_1.1.1 lubridate_1.9.4    
-    ##  [4] forcats_1.0.0       stringr_1.5.1       dplyr_1.1.4        
-    ##  [7] purrr_1.0.4         readr_2.1.5         tidyr_1.3.1        
-    ## [10] tibble_3.3.0        ggplot2_3.5.2       tidyverse_2.0.0    
-    ## [13] tarchetypes_0.13.1  targets_1.11.3     
+    ##  [1] gtrendsR_1.5.2      ggridges_0.5.7      ggh4x_0.3.1        
+    ##  [4] googlesheets4_1.1.1 lubridate_1.9.4     forcats_1.0.0      
+    ##  [7] stringr_1.5.1       dplyr_1.2.0         purrr_1.0.4        
+    ## [10] readr_2.1.5         tidyr_1.3.2         tibble_3.3.1       
+    ## [13] ggplot2_4.0.2       tidyverse_2.0.0     tarchetypes_0.13.1 
+    ## [16] targets_1.11.3     
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] gtable_0.3.6         xfun_0.53            processx_3.8.6      
-    ##  [4] lattice_0.22-6       gargle_1.5.2         callr_3.7.6         
-    ##  [7] tzdb_0.5.0           vctrs_0.6.5          tools_4.5.0         
-    ## [10] ps_1.9.1             PNWColors_0.1.0      generics_0.1.3      
-    ## [13] base64url_1.4        parallel_4.5.0       pkgconfig_2.0.3     
-    ## [16] Matrix_1.7-3         data.table_1.17.0    secretbase_1.0.5    
-    ## [19] RColorBrewer_1.1-3   distributional_0.5.0 lifecycle_1.0.4     
-    ## [22] compiler_4.5.0       farver_2.1.2         codetools_0.2-20    
-    ## [25] carData_3.0-5        htmltools_0.5.8.1    yaml_2.3.10         
-    ## [28] Formula_1.2-5        car_3.1-3            pillar_1.10.2       
-    ## [31] abind_1.4-8          nlme_3.1-168         tidyselect_1.2.1    
-    ## [34] digest_0.6.37        stringi_1.8.7        splines_4.5.0       
-    ## [37] labeling_0.4.3       cowplot_1.1.3        fastmap_1.2.0       
-    ## [40] grid_4.5.0           cli_3.6.5            magrittr_2.0.3      
-    ## [43] broom_1.0.8          withr_3.0.2          prettyunits_1.2.0   
-    ## [46] scales_1.4.0         backports_1.5.0      googledrive_2.1.1   
-    ## [49] timechange_0.3.0     rmarkdown_2.29       igraph_2.1.4        
-    ## [52] cellranger_1.1.0     hms_1.1.3            evaluate_1.0.3      
-    ## [55] knitr_1.50           ggdist_3.3.3         mgcv_1.9-1          
-    ## [58] rlang_1.1.6          Rcpp_1.0.14          glue_1.8.0          
-    ## [61] rstudioapi_0.17.1    R6_2.6.1             fs_1.6.6
+    ##  [1] gtable_0.3.6       xfun_0.53          insight_1.5.0      processx_3.8.6    
+    ##  [5] lattice_0.22-6     gargle_1.5.2       callr_3.7.6        tzdb_0.5.0        
+    ##  [9] vctrs_0.7.1        tools_4.5.0        ps_1.9.1           PNWColors_0.1.0   
+    ## [13] generics_0.1.3     base64url_1.4      parallel_4.5.0     pkgconfig_2.0.3   
+    ## [17] Matrix_1.7-3       data.table_1.17.0  secretbase_1.0.5   RColorBrewer_1.1-3
+    ## [21] S7_0.2.0           lifecycle_1.0.5    compiler_4.5.0     farver_2.1.2      
+    ## [25] codetools_0.2-20   carData_3.0-5      htmltools_0.5.8.1  yaml_2.3.10       
+    ## [29] Formula_1.2-5      car_3.1-3          pillar_1.10.2      abind_1.4-8       
+    ## [33] nlme_3.1-168       tidyselect_1.2.1   digest_0.6.37      stringi_1.8.7     
+    ## [37] splines_4.5.0      labeling_0.4.3     cowplot_1.1.3      fastmap_1.2.0     
+    ## [41] grid_4.5.0         cli_3.6.5          magrittr_2.0.3     broom_1.0.12      
+    ## [45] withr_3.0.2        prettyunits_1.2.0  scales_1.4.0       backports_1.5.0   
+    ## [49] googledrive_2.1.1  timechange_0.3.0   rmarkdown_2.29     igraph_2.1.4      
+    ## [53] cellranger_1.1.0   hms_1.1.3          evaluate_1.0.3     knitr_1.50        
+    ## [57] mgcv_1.9-1         rlang_1.1.7        glue_1.8.0         rstudioapi_0.17.1 
+    ## [61] see_0.13.0         R6_2.6.1           fs_1.6.6
 
 </details>
