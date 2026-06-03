@@ -302,3 +302,71 @@ pnm = function(){
   
 }
 
+
+## summarize pore radius
+
+compute_pnm_radius_summary = function(xct_pnm_processed){
+  
+  pnm_radius_summary = 
+    pnm_clean2 %>% 
+    group_by(water_treatment, core_name, timepoint) %>% 
+    dplyr::summarise(mean = round(mean(EqRadius, na.rm = T), 3),
+                     median = round(median(EqRadius, na.rm = T), 3),
+                     max = round(max(EqRadius, na.rm = T), 3),
+                     min = round(min(EqRadius, na.rm = T), 3))
+  
+  
+  ##  PAIRWISE KOLMOGOROV-SMIRNOV
+  # devtools::install_github("happyrabbit/DataScienceR")
+  library(DataScienceR)
+  
+  
+  do_pairwise_ks_test = function(dat){
+    
+    pairwise_ks_test(value = dat$EqRadius,
+                     group = dat$timepoint) %>% 
+      as.data.frame() %>% 
+      rownames_to_column("time1")
+  }
+  
+  pairwise_ks = 
+    pnm_clean2 %>% 
+    group_by(water_treatment, core_name) %>% 
+    do(do_pairwise_ks_test(.)) %>% 
+    pivot_longer(cols = -c(water_treatment, core_name, time1), values_to = "p", names_to = "time2") %>% 
+    mutate(p = round(p, 2)) %>% 
+    filter(time1 != time2) %>% 
+    mutate(asterisk = case_when(p <= 0.05 ~ "*"))
+  
+  ## PAIRWISE KOLMOGOROV-SMIRNOV
+  library(rcompanion)
+  library(multcompView)
+  
+  assign_letters = function(df){
+    
+    letters = multcompLetters(setNames(as.numeric(df$p), df$comparison),
+                              compare="<",
+                              threshold=0.05,
+                              #Letters=letters,
+                              reversed = FALSE)
+    
+    letters$Letters %>% as.data.frame() %>% rownames_to_column("timepoint")
+    
+  }
+  
+  ks_letters =  
+    pairwise_ks %>% 
+    filter(!is.na(p)) %>% 
+    mutate(comparison = paste0(time1, "-", time2)) %>% 
+    dplyr::select(core_name, comparison, p) %>% 
+    ungroup() %>% 
+    group_by(core_name) %>% 
+    do(assign_letters(.))
+  
+  
+  
+  pnm_radius_summary %>% 
+    left_join(ks_letters) 
+  
+}
+
