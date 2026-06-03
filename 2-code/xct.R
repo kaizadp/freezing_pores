@@ -224,7 +224,9 @@ process_xct_pnm = function(xct_pnm, corekey){
            timepoint = factor(timepoint, 
                               levels = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))) %>% 
     left_join(corekey %>% dplyr::select(core_name, water_treatment)) %>% 
-    dplyr::select(source, core_name, water_treatment, timepoint, everything())
+    dplyr::select(source, core_name, water_treatment, timepoint, everything()) %>% 
+    mutate(water_treatment = paste(water_treatment, "water"),
+           water_treatment = factor(water_treatment, levels = c("low water", "high water")))
   
   
 }
@@ -299,3 +301,4 @@ pnm = function(){
   
   
 }
+
