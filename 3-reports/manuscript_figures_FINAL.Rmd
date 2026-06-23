@@ -469,6 +469,8 @@ licor_processed_rates %>%
   filter(!is.na(timepoint)) %>% 
   filter(elapsed_hr < 20) %>% 
   filter(!core_name %in% c("FOR_20", "FOR_21")) %>% 
+  mutate(core_name = str_replace(core_name, "FOR_0", "Core "),
+         core_name = str_replace(core_name, "FOR_", "Core ")) %>% 
   ggplot(aes(x = elapsed_hr, y = co2_max_ppm, group = core_name, color = water_treatment))+
   geom_line()+
   facet_grid(water_treatment+core_name ~ timepoint, scales = "free_x")
@@ -531,17 +533,18 @@ licor_cumulative %>%
   group_by(water_treatment, timepoint) %>% 
   dplyr::summarise(mean = mean(co2_umol_cum_g),
                    se = sd(co2_umol_cum_g)/sqrt(n())) %>% 
+  mutate(timepoint = str_replace(timepoint, "FTC", "T")) %>% 
   ggplot(aes(x = timepoint, y = mean, fill = (water_treatment)))+
   geom_bar(stat = "identity", width = 0.5, position = position_dodge(width = 0.7), color = "black", alpha = 0.8)+
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se),
-                position = position_dodge(width = 0.7), width = 0.15)+
-  geom_point(data = licor_cumulative %>% filter(core_name %in% c("FOR_07", "FOR_08", "FOR_09", "FOR_11", "FOR_12")),
+              position = position_dodge(width = 0.7), width = 0.15)+
+  geom_point(data = licor_cumulative %>% filter(core_name %in% c("FOR_07", "FOR_08", "FOR_09", "FOR_11", "FOR_12")) %>% 
+               mutate(timepoint = str_replace(timepoint, "FTC", "T")),
              aes(y = co2_umol_cum_g),
-             position = position_dodge(width = 0.7), size = 2.5
-                 )+
+             position = position_dodge(width = 0.7), size = 2.5)+
   scale_fill_manual(values = c( "#CEA07E", "#155CA2"))+
   scale_color_manual(values = c( "#CEA07E", "#155CA2"))+
-  labs(y = "Cumulative CO2 evolved, μmol",
+  labs(y = expression(bold("Cumulative CO"[2] * " evolved, μmol")),
        fill = "",
        x = "")+
   theme(legend.position = c(0.8, 0.8))
