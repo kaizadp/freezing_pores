@@ -355,7 +355,8 @@ throats2 %>%
 xct_summary2 = 
   xct_summary_processed %>% 
   mutate(water_treatment = paste(water_treatment, "water"),
-         water_treatment = factor(water_treatment, levels = c("low water", "high water")))
+         water_treatment = factor(water_treatment, levels = c("low water", "high water")),
+         freeze_thaw = str_extract(timepoint, "F|T"))
 
 ```
 
@@ -388,22 +389,23 @@ xct_summary2 %>%
 
 ```
 
-```{r pores_volume_connected, fig.height= 9.5, fig.width=8}
+```{r pores_volume_connected, fig.height= 9.5, fig.width=10}
 
 gg_pore_conn =
   xct_summary2 %>% 
   filter(!is.na(timepoint)) %>% 
-#  filter(core_name == "FOR_04") %>% 
+  #  filter(core_name == "FOR_04") %>% 
   ggplot(aes(x = timepoint, y = connected_pores_percent, 
-             color = core_name, fill = core_name, group = core_name))+
+             color = core_name, fill = core_name, group = core_name, shape = freeze_thaw))+
   geom_line(linewidth = 1)+
-  geom_point(size = 5, color = "white", shape = 21, stroke = 2)+
+  geom_point(size = 5, color = "white", stroke = 2)+
   geom_text(data = xct_summary2 %>% filter(timepoint == "T0") %>% mutate(label2 = parse_number(core_name)),
             aes(label = label2),
-            nudge_x = -0.35, nudge_y = 0.3, size = 4)+
+            nudge_x = -0.35, nudge_y = 0.3, size = 6, fontface = "bold")+
   ylim(50, 100)+
   scale_color_manual(values = pal_cores)+
   scale_fill_manual(values = pal_cores)+
+  scale_shape_manual(values = c(21, 25))+
   facet_wrap(~water_treatment)+
   labs(y = "Connected Pores (%)",
        x = "")+
@@ -413,11 +415,12 @@ gg_pore_vol =
   xct_summary2 %>% 
   filter(!is.na(timepoint)) %>% 
   ggplot(aes(x = timepoint, y = total_volume_pores_mm3, 
-             color = core_name, fill = core_name, group = core_name))+
+             color = core_name, fill = core_name, group = core_name, shape = freeze_thaw))+
   geom_line(linewidth = 1)+
-  geom_point(size = 5, color = "white", shape = 21, stroke = 2)+
+  geom_point(size = 5, color = "white", stroke = 2)+
   scale_color_manual(values = pal_cores)+
   scale_fill_manual(values = pal_cores)+
+  scale_shape_manual(values = c(21, 25))+
   facet_wrap(~water_treatment)+
   labs(y = "Total pore volume (mm3)",
        x = "")+
