@@ -59,7 +59,7 @@ targets::tar_load_everything()
 ## PNM
 
 ```{r pnm_clean}
-  
+
 pnm_clean2 = 
   xct_pnm_processed %>% 
   mutate(water_treatment = paste(water_treatment, "water"),
@@ -68,7 +68,7 @@ pnm_clean2 =
 
 #### Equivalent radius - distributions
 
-```{r pnm_radius_ridges, fig.height=10, fig.width=18}
+```{r pnm_radius_ridges, fig.height=20, fig.width=18}
 
 # sysfonts::font_add_google("Playfair Display", "Playfair")
 # sysfonts::font_add_google("Roboto", "Roboto")
@@ -76,21 +76,24 @@ pnm_clean2 =
 # showtext_auto()
 # 
 
-xct_pnm_processed %>% 
+gg_radius_high = 
+  xct_pnm_processed %>% 
+  mutate(core_name = str_replace(core_name, "FOR_0", "Core ")) %>% 
   filter(water_treatment == "high water") %>% 
   ggplot(aes(x = EqRadius))+
   geom_density(aes(group = timepoint, fill = timepoint), color = "black", 
                alpha = 0.9, linewidth = 1)+
   scale_fill_manual(values = rev(PNWColors::pnw_palette("Sunset2", 33)))+
-    scale_color_manual(values = c("grey60", "lightblue", "#dd4124", "lightblue", "#dd4124", "lightblue", "#dd4124"),
+  scale_color_manual(values = c("grey60", "lightblue", "#dd4124", "lightblue", "#dd4124", "lightblue", "#dd4124"),
                      breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
   scale_fill_manual(values = c("grey60", "lightblue", "pink", "lightblue", "pink", "lightblue", "pink"),
-                     breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
-  geom_label(data = xct_pnm_processed %>% distinct(core_name, timepoint, water_treatment) %>% filter(water_treatment == "high water"),
-            aes(label = paste("   ", timepoint, "   "), x = 2, y = 0.5, fill = timepoint),
-            border.colour = NA, alpha = 0.8,
-            face = "bold", size = 8,
-            label.padding = unit(0.3, "lines"))+
+                    breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
+  geom_label(data = xct_pnm_processed %>% distinct(core_name, timepoint, water_treatment) %>% filter(water_treatment == "high water") %>% 
+               mutate(core_name = str_replace(core_name, "FOR_0", "Core ")),
+             aes(label = paste("   ", timepoint, "   "), x = 2, y = 0.5, fill = timepoint),
+             border.colour = NA, alpha = 0.8,
+             face = "bold", size = 8,
+             label.padding = unit(0.3, "lines"))+
   facet_grid(timepoint ~ core_name)+
   labs(x = "
        Equivalent Radius (mm)",
@@ -100,6 +103,7 @@ xct_pnm_processed %>%
   theme(legend.position = "none",
         panel.spacing.y = unit(-8, "lines"),
         axis.text.x = element_text(size = 16),
+        axis.title = element_text(size = 18),
         plot.title = element_text(hjust = 0.5, size = 20, face = "bold"),
         panel.grid = element_blank(),
         strip.background = element_blank(),
@@ -113,21 +117,24 @@ xct_pnm_processed %>%
   )
 
 
-xct_pnm_processed %>% 
+gg_radius_low = 
+  xct_pnm_processed %>% 
+  mutate(core_name = str_replace(core_name, "FOR_0", "Core ")) %>% 
   filter(water_treatment == "low water") %>% 
   ggplot(aes(x = EqRadius))+
   geom_density(aes(group = timepoint, fill = timepoint), color = "black", 
                alpha = 0.9, linewidth = 1)+
   scale_fill_manual(values = rev(PNWColors::pnw_palette("Sunset2", 33)))+
-    scale_color_manual(values = c("grey40", "lightblue", "#dd4124", "lightblue", "#dd4124", "lightblue", "#dd4124"),
+  scale_color_manual(values = c("grey40", "lightblue", "#dd4124", "lightblue", "#dd4124", "lightblue", "#dd4124"),
                      breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
   scale_fill_manual(values = c("grey40", "lightblue", "pink", "lightblue", "pink", "lightblue", "pink"),
-                     breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
-  geom_label(data = xct_pnm_processed %>% distinct(core_name, timepoint, water_treatment) %>% filter(water_treatment == "low water"),
-            aes(label = paste("   ", timepoint, "   "), x = 2, y = 0.5, fill = timepoint),
-            border.colour = NA, alpha = 0.8,
-            face = "bold", size = 8,
-            label.padding = unit(0.3, "lines"))+
+                    breaks = c("T0", "F1", "T1", "F2", "T2", "F3", "T3"))+
+  geom_label(data = xct_pnm_processed %>% distinct(core_name, timepoint, water_treatment) %>% filter(water_treatment == "low water") %>% 
+               mutate(core_name = str_replace(core_name, "FOR_0", "Core ")),
+             aes(label = paste("   ", timepoint, "   "), x = 2, y = 0.5, fill = timepoint),
+             border.colour = NA, alpha = 0.8,
+             face = "bold", size = 8,
+             label.padding = unit(0.3, "lines"))+
   facet_grid(timepoint ~ core_name)+
   labs(x = "
        Equivalent Radius (mm)",
@@ -137,6 +144,7 @@ xct_pnm_processed %>%
   theme(legend.position = "none",
         panel.spacing.y = unit(-8, "lines"),
         axis.text.x = element_text(size = 16),
+        axis.title = element_text(size = 18),
         plot.title = element_text(hjust = 0.5, size = 20, face = "bold"),
         panel.grid = element_blank(),
         strip.background = element_blank(),
@@ -148,7 +156,7 @@ xct_pnm_processed %>%
         strip.text.x = element_text(size = 20),
         plot.background = element_rect(color = "black", fill = NA, linewidth = 2))
 
-
+cowplot::plot_grid(gg_radius_low, gg_radius_high, ncol = 1, scale = 0.98)
 ```
 
 
