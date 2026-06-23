@@ -437,6 +437,7 @@ cowplot::plot_grid(gg_pore_vol, gg_pore_conn, ncol = 1, labels = c("A", "B"))
 ```{r}
 print("LOW WATER CORES")
 xct_radius_summary %>% 
+  mutate(core_name = str_replace(core_name, "FOR_0", "Core ")) %>% 
   filter(water_treatment == "low water") %>% 
   ungroup() %>% 
   dplyr::select(-water_treatment) %>% 
@@ -444,6 +445,7 @@ xct_radius_summary %>%
 
 print("HIGH WATER CORES")
 xct_radius_summary %>% 
+  mutate(core_name = str_replace(core_name, "FOR_0", "Core ")) %>% 
   filter(water_treatment == "high water") %>% 
   ungroup() %>% 
   dplyr::select(-water_treatment) %>% 
