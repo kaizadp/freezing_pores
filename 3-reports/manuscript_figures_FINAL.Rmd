@@ -430,6 +430,44 @@ gg_pore_vol =
 cowplot::plot_grid(gg_pore_vol, gg_pore_conn, ncol = 1, labels = c("A", "B"))
 ```
 
+#### permeability anisotropy
+
+```{r xct_anisotropy}
+xct_anisotropy = 
+  xct_summary2 %>% 
+  dplyr::select(source, core_name, water_treatment, timepoint, freeze_thaw, contains("PNM")) %>% 
+  mutate(XY = PNM_x_k_um2/PNM_y_k_um2,
+         YZ = PNM_y_k_um2/PNM_z_k_um2,
+         XZ = PNM_x_k_um2/PNM_z_k_um2,
+         XYZ = XY/PNM_z_k_um2)
+
+```
+
+```{r xct_anisotropy_plot, fig.height=8, fig.width=12}
+
+xct_anisotropy %>% 
+  filter(!(core_name == "FOR_04" & XYZ > 4000000)) %>% 
+  ggplot(aes(y = XYZ, x = timepoint))+
+  geom_line(aes(group = 1), linewidth = 1)+
+  geom_point(size = 5, shape = 21, fill = "black", color = "white", stroke = 2)+
+  facet_nested_wrap(~ water_treatment + core_name, scale = "free_y")+
+  labs(y = "permeability anisotropy (XY/Z)",
+       x = "")+
+  scale_y_continuous(labels = scales::label_comma())
+# 
+# xct_anisotropy %>% 
+#    filter(!(core_name == "FOR_04" & XYZ > 4000000)) %>% 
+#   ggplot(aes(y = XYZ, x = timepoint, color = core_name))+
+#   geom_point()+
+#   geom_line(aes(group = core_name))+
+#   facet_nested_wrap(~ water_treatment, scale = "free_y")
+# 
+# options(scipen = 9999)
+
+
+```
+
+
 ## XCT summary tables 
 
 #### Equivalent radius (mm)
